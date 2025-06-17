@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'path/to/sign_in_page.dart'; // Ganti dengan path yang sesuai
 
 class TampilanAwal extends StatefulWidget {
   const TampilanAwal({Key? key}) : super(key: key);
@@ -66,12 +65,7 @@ class _TampilanAwalState extends State<TampilanAwal> {
                     width: 200,
                     height: 45,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SignInPage()),
-                        );
-                      },
+                      onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         shape: RoundedRectangleBorder(
