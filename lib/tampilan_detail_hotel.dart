@@ -12,7 +12,7 @@ class _TampilanDetailHotelState extends State<TampilanDetailHotel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hotel Detail'),
+        title: const Text('Detail Hotel'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
