@@ -24,7 +24,7 @@ class _ProfilState extends State<Profil> {
               backgroundImage: AssetImage('assets/images/profile.jpg'), // ganti path ini sesuai asset kamu
             ),
             const SizedBox(height: 16),
-            const Text(
+            const Text( 
               'Nama Pengguna',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
