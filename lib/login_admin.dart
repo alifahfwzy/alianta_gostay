@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'dashboard_admin.dart'; // Uncomment jika sudah ada halaman dashboard
+import 'package:alianta_gostay/beranda_admin.dart';
 
 class LoginAdmin extends StatefulWidget {
   const LoginAdmin({super.key});
@@ -25,8 +25,10 @@ class _LoginAdminState extends State<LoginAdmin> {
       _showSnackbar("Login admin berhasil!");
 
       // TODO: Navigasi ke halaman dashboard admin
-      // Navigator.pushReplacement(context,
-      //   MaterialPageRoute(builder: (_) => DashboardAdminScreen()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => BerandaAdmin()),
+      );
     } else {
       _showSnackbar("Username atau Password salah.");
     }
