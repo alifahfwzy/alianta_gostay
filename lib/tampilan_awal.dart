@@ -52,7 +52,7 @@ class _TampilanAwalState extends State<TampilanAwal> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 32.0),
                     child: Text(
-                      'Temukan hotel menakjubkan dan nikmati kebebasan bermain saat anda tiba bersama orang tersayang.',
+                      'Temukan hotel menakjubkan dan nikmati kebebasan bermain saat anda tiba bersama orang tersayang',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14),
                     ),
