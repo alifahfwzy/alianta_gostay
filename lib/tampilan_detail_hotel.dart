@@ -15,7 +15,7 @@ class _TampilanDetailHotelState extends State<TampilanDetailHotel> {
         title: const Text('Detail Hotel'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
+          onPressed: () { 
             Navigator.pop(context);
           },
         ),
