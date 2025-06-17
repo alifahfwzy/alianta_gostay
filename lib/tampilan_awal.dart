@@ -46,16 +46,13 @@ class _TampilanAwalState extends State<TampilanAwal> {
                 children: [
                   const Text(
                     'Cari Sekarang',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   const SizedBox(height: 10),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 32.0),
                     child: Text(
-                      'Temukan hotel menakjubkan dan nikmati kebebasan bermain saat anda tiba bersama orang tersayang',
+                      'Temukan hotel menakjubkan dan nikmati kebebasan bermain saat anda tiba bersama orang tersayang.',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14),
                     ),
