@@ -1,148 +1,72 @@
 import 'package:flutter/material.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+class Profile extends StatefulWidget {
+  const Profile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white, 
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Icon kembali
-              IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              const SizedBox(height: 8),
-              const Center(
-                child: Text(
-                  'Masuk',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(height: 24),
-              // Input Email
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Masukkan Email',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Input Password
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: const TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Kata Sandi',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              // Tombol Masuk
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightBlueAccent.shade100,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  onPressed: () {
-                    // Navigasi ke halaman profil
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProfileScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Masuk',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              // Tombol Buat Akun
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey.shade200,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  onPressed: () {
-                    // Tambahkan aksi buat akun di sini
-                  },
-                  child: const Text(
-                    'Buat akun',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              const Spacer(),
-              // Masuk sebagai admin
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    // Tambahkan aksi masuk sebagai admin di sini
-                  },
-                  child: const Text(
-                    'Masuk sebagai Admin',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  State<Profile> createState() => _ProfileState();
 }
 
-// Tambahkan halaman profil sebagai tujuan navigasi
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
+class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profil')),
-      body: const Center(
-        child: Text(
-          'Ini adalah halaman Profil',
-          style: TextStyle(fontSize: 20),
+      appBar: AppBar(
+        title: const Text('Profil Saya'),
+        backgroundColor: Colors.lightBlueAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const CircleAvatar(
+              radius: 50,
+              backgroundImage: AssetImage('assets/images/profile.jpg'), // ganti path ini sesuai asset kamu
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Nama Pengguna',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'namauser@gmail.com',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 24),
+            ListTile(
+              leading: const Icon(Icons.phone),
+              title: const Text('Nomor Telepon'),
+              subtitle: const Text('+62 812-3456-7890'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Alamat'),
+              subtitle: const Text('Jl. Contoh Alamat No.123'),
+              onTap: () {},
+            ),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlueAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                onPressed: () {
+                  // aksi logout atau lainnya
+                },
+                child: const Text(
+                  'Keluar',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
