@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TampilanAwal extends StatefulWidget {
-  const TampilanAwal({Key? key}) : super(key: key);
+  const TampilanAwal({super.key});
 
   @override
   State<TampilanAwal> createState() => _TampilanAwalState();
@@ -63,12 +63,7 @@ class _TampilanAwalState extends State<TampilanAwal> {
                     height: 45,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginUser(),
-                          ),
-                        );
+                        // Button is now active but has no navigation action.
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
@@ -88,19 +83,6 @@ class _TampilanAwalState extends State<TampilanAwal> {
           ),
         ],
       ),
-    );
-  }
-}
-
-// Placeholder class for LoginUser to make the code runnable without extra files.
-class LoginUser extends StatelessWidget {
-  const LoginUser({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Login Page')),
-      body: const Center(child: Text('Halaman Login')),
     );
   }
 }
