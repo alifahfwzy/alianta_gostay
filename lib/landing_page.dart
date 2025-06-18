@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TampilanAwal extends StatefulWidget {
-  const TampilanAwal({Key? key}) : super(key: key);
+  const TampilanAwal({super.key});
 
   @override
   State<TampilanAwal> createState() => _TampilanAwalState();
