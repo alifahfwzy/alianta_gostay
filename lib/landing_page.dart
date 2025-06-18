@@ -36,7 +36,10 @@ class _LandingPageState extends State<LandingPage> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade200, Colors.blue.shade200],
+            colors: [
+              const Color.fromARGB(255, 140, 200, 249),
+              Colors.blue.shade200,
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
