@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:alianta_gostay/beranda_admin.dart';
+import 'beranda_admin.dart';
 
 class LoginAdmin extends StatefulWidget {
   const LoginAdmin({super.key});

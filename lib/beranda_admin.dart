@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'tambah_hotel.dart';
+import 'tampilan_awal.dart';
 
 class BerandaAdmin extends StatefulWidget {
   const BerandaAdmin({super.key});
@@ -17,14 +19,20 @@ class _BerandaAdminState extends State<BerandaAdmin> {
   ];
 
   void _tambahHotel() {
-    // Contoh aksi tambah data (bisa diganti dengan navigasi ke form)
-    setState(() {
-      hotels.add({"name": "Hotel Baru", "address": "Alamat baru, Anytown"});
-    });
+    // Navigate to Tambah Hotel page
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TambahHotel()),
+    );
   }
 
   void _keluar() {
-    Navigator.pop(context); // Kembali ke login admin
+    // Navigate to Tampilan Awal (main screen)
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const TampilanAwal()),
+      (route) => false, // Remove all previous routes
+    );
   }
 
   @override
