@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'beranda.dart';
 
 class BuatAkun extends StatefulWidget {
   const BuatAkun({super.key});
@@ -68,7 +69,36 @@ class _BuatAkunState extends State<BuatAkun> {
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    // proses pendaftaran
+                    // Validasi form (sederhana)
+                    String email = _emailController.text;
+                    String password = _passwordController.text;
+                    String confirmPassword = _confirmPasswordController.text;
+                    String username = _usernameController.text;
+                    
+                    if (email.isNotEmpty && password.isNotEmpty && 
+                        confirmPassword.isNotEmpty && username.isNotEmpty) {
+                      if (password == confirmPassword) {
+                        // Navigate to Beranda after successful registration
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BerandaPage(),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Password dan konfirmasi password tidak sama'),
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Semua field harus diisi'),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightBlue[100],

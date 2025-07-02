@@ -1,5 +1,5 @@
-import 'package:alianta_gostay/login_user.dart';
 import 'package:flutter/material.dart';
+import 'login_user.dart';
 
 class TampilanAwal extends StatefulWidget {
   const TampilanAwal({super.key});

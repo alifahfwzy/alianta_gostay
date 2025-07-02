@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'beranda.dart';
+import 'buat_akun.dart';
+import 'login_admin.dart';
 
 class LoginUser extends StatefulWidget {
   const LoginUser({super.key});
@@ -71,7 +74,26 @@ class _LoginUserState extends State<LoginUser> {
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    // logika masuk
+                    // Validasi email dan password (sederhana)
+                    String email = _emailController.text;
+                    String password = _passwordController.text;
+                    
+                    if (email.isNotEmpty && password.isNotEmpty) {
+                      // Navigate to Beranda page
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BerandaPage(),
+                        ),
+                      );
+                    } else {
+                      // Show error message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Email dan password harus diisi'),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightBlue[100],
@@ -92,7 +114,13 @@ class _LoginUserState extends State<LoginUser> {
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    // navigasi ke halaman buat akun
+                    // Navigate to Buat Akun page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BuatAkun(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey[200],
@@ -111,7 +139,13 @@ class _LoginUserState extends State<LoginUser> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    // logika masuk sebagai admin
+                    // Navigate to Login Admin page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginAdmin(),
+                      ),
+                    );
                   },
                   child: const Text(
                     'Masuk sebagai Admin',
