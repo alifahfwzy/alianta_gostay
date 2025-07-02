@@ -113,10 +113,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                         horizontal: 16,
                         vertical: 16,
                       ),
-                      prefixIcon: Icon(
-                        Icons.person_outline,
-                        color: Colors.grey[500],
-                      ),
+                      prefixIcon: Icon(Icons.person, color: Colors.grey[500]),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -146,10 +143,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                         horizontal: 16,
                         vertical: 16,
                       ),
-                      prefixIcon: Icon(
-                        Icons.lock_outline,
-                        color: Colors.grey[500],
-                      ),
+                      prefixIcon: Icon(Icons.vpn_key, color: Colors.grey[500]),
                     ),
                   ),
                 ],

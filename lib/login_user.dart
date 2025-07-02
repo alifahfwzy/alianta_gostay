@@ -49,7 +49,7 @@ class _LoginUserState extends State<LoginUser> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              
+
               // Welcome Message
               const Center(
                 child: Column(
@@ -65,18 +65,15 @@ class _LoginUserState extends State<LoginUser> {
                     SizedBox(height: 8),
                     Text(
                       'Masuk ke akun Anda untuk melanjutkan',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 50),
-              
+
               // Email Field
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,10 +95,7 @@ class _LoginUserState extends State<LoginUser> {
                       hintStyle: TextStyle(color: Colors.grey[500]),
                       filled: true,
                       fillColor: Colors.grey[50],
-                      prefixIcon: Icon(
-                        Icons.email_outlined,
-                        color: Colors.grey[500],
-                      ),
+                      prefixIcon: Icon(Icons.mail, color: Colors.grey[500]),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.grey[300]!),
@@ -112,7 +106,10 @@ class _LoginUserState extends State<LoginUser> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.blue, width: 2),
+                        borderSide: const BorderSide(
+                          color: Colors.blue,
+                          width: 2,
+                        ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -122,9 +119,9 @@ class _LoginUserState extends State<LoginUser> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Password Field
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,10 +143,7 @@ class _LoginUserState extends State<LoginUser> {
                       hintStyle: TextStyle(color: Colors.grey[500]),
                       filled: true,
                       fillColor: Colors.grey[50],
-                      prefixIcon: Icon(
-                        Icons.lock_outline,
-                        color: Colors.grey[500],
-                      ),
+                      prefixIcon: Icon(Icons.vpn_key, color: Colors.grey[500]),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.grey[300]!),
@@ -160,7 +154,10 @@ class _LoginUserState extends State<LoginUser> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.blue, width: 2),
+                        borderSide: const BorderSide(
+                          color: Colors.blue,
+                          width: 2,
+                        ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -170,9 +167,9 @@ class _LoginUserState extends State<LoginUser> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Login Button
               SizedBox(
                 width: double.infinity,
@@ -210,16 +207,13 @@ class _LoginUserState extends State<LoginUser> {
                   ),
                   child: const Text(
                     'Masuk',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Register Button
               SizedBox(
                 width: double.infinity,
@@ -240,16 +234,13 @@ class _LoginUserState extends State<LoginUser> {
                   ),
                   child: const Text(
                     'Buat Akun Baru',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 40),
-              
+
               // Divider
               Row(
                 children: [
@@ -258,18 +249,15 @@ class _LoginUserState extends State<LoginUser> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
                       'atau',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
                     ),
                   ),
                   Expanded(child: Divider(color: Colors.grey[300])),
                 ],
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Admin Login Button
               Center(
                 child: TextButton.icon(
@@ -281,11 +269,7 @@ class _LoginUserState extends State<LoginUser> {
                       ),
                     );
                   },
-                  icon: Icon(
-                    Icons.admin_panel_settings_outlined,
-                    color: Colors.grey[700],
-                    size: 20,
-                  ),
+                  icon: Icon(Icons.settings, color: Colors.grey[700], size: 20),
                   label: Text(
                     'Masuk sebagai Admin',
                     style: TextStyle(
@@ -302,7 +286,7 @@ class _LoginUserState extends State<LoginUser> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 20),
             ],
           ),
