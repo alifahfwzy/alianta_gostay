@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'beranda.dart';
+import 'explore_page.dart';
 
 class Profil extends StatefulWidget {
-  const Profil ({super.key});
+  const Profil({super.key});
 
   @override
   State<Profil> createState() => _ProfilState();
@@ -21,7 +23,9 @@ class _ProfilState extends State<Profil> {
           children: [
             const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/images/profile.jpg'), // ganti path ini sesuai asset kamu
+              backgroundImage: AssetImage(
+                'assets/images/profile.jpg',
+              ), // ganti path ini sesuai asset kamu
             ),
             const SizedBox(height: 16),
             const Text(
@@ -68,6 +72,37 @@ class _ProfilState extends State<Profil> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 2, // Profile is selected
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              // Navigate to Beranda page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BerandaPage()),
+              );
+              break;
+            case 1:
+              // Navigate to Explore page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ExplorePage()),
+              );
+              break;
+            case 2:
+              // Already on Profile page, do nothing
+              break;
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Cari'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
       ),
     );
   }

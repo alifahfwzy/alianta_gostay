@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'explore_page.dart';
+import 'profil.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,10 +9,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BerandaPage(),
-      debugShowCheckedModeBanner: false,
-    );
+    return MaterialApp(home: BerandaPage(), debugShowCheckedModeBanner: false);
   }
 }
 
@@ -23,10 +22,7 @@ class BerandaPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Beranda',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -94,19 +90,31 @@ class BerandaPage extends StatelessWidget {
         currentIndex: 0,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              // Already on Beranda, do nothing
+              break;
+            case 1:
+              // Navigate to Explore page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ExplorePage()),
+              );
+              break;
+            case 2:
+              // Navigate to Profile page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Profil()),
+              );
+              break;
+          }
+        },
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Cari',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profil',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Cari'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),
     );

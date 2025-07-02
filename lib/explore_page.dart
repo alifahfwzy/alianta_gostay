@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'beranda.dart';
+import 'profil.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -70,9 +72,25 @@ class _ExplorePageState extends State<ExplorePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
+          switch (index) {
+            case 0:
+              // Navigate to Beranda page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BerandaPage()),
+              );
+              break;
+            case 1:
+              // Already on Cari page, do nothing
+              break;
+            case 2:
+              // Navigate to Profile page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Profil()),
+              );
+              break;
+          }
         },
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,

@@ -77,14 +77,12 @@ class _LoginUserState extends State<LoginUser> {
                     // Validasi email dan password (sederhana)
                     String email = _emailController.text;
                     String password = _passwordController.text;
-                    
+
                     if (email.isNotEmpty && password.isNotEmpty) {
                       // Navigate to Beranda page
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => BerandaPage(),
-                        ),
+                        MaterialPageRoute(builder: (context) => BerandaPage()),
                       );
                     } else {
                       // Show error message
@@ -117,9 +115,7 @@ class _LoginUserState extends State<LoginUser> {
                     // Navigate to Buat Akun page
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const BuatAkun(),
-                      ),
+                      MaterialPageRoute(builder: (context) => const BuatAkun()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

@@ -74,9 +74,11 @@ class _BuatAkunState extends State<BuatAkun> {
                     String password = _passwordController.text;
                     String confirmPassword = _confirmPasswordController.text;
                     String username = _usernameController.text;
-                    
-                    if (email.isNotEmpty && password.isNotEmpty && 
-                        confirmPassword.isNotEmpty && username.isNotEmpty) {
+
+                    if (email.isNotEmpty &&
+                        password.isNotEmpty &&
+                        confirmPassword.isNotEmpty &&
+                        username.isNotEmpty) {
                       if (password == confirmPassword) {
                         // Navigate to Beranda after successful registration
                         Navigator.pushReplacement(
@@ -88,7 +90,9 @@ class _BuatAkunState extends State<BuatAkun> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Password dan konfirmasi password tidak sama'),
+                            content: Text(
+                              'Password dan konfirmasi password tidak sama',
+                            ),
                           ),
                         );
                       }
