@@ -1,7 +1,8 @@
+import 'package:alianta_gostay/login_user.dart';
 import 'package:flutter/material.dart';
 
 class TampilanAwal extends StatefulWidget {
-  const TampilanAwal({Key? key}) : super(key: key);
+  const TampilanAwal({super.key});
 
   @override
   State<TampilanAwal> createState() => _TampilanAwalState();
@@ -62,14 +63,24 @@ class _TampilanAwalState extends State<TampilanAwal> {
                     width: 200,
                     height: 45,
                     child: ElevatedButton(
-                      onPressed: null,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginUser(),
+                          ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),
                       ),
-                      child: const Text('Masuk'),
+                      child: const Text(
+                        'Masuk',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],
