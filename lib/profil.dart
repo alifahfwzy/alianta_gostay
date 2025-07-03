@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Profil extends StatefulWidget {
-  const Profil ({super.key});
+  final String email;
+  const Profil({super.key, required this.email});
 
   @override
   State<Profil> createState() => _ProfilState();
@@ -21,7 +22,7 @@ class _ProfilState extends State<Profil> {
           children: [
             const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/images/profile.jpg'), // ganti path ini sesuai asset kamu
+              backgroundImage: AssetImage('assets/images/profile.jpg'),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -29,22 +30,20 @@ class _ProfilState extends State<Profil> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'namauser@gmail.com',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+            Text(
+              widget.email,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 24),
-            ListTile(
-              leading: const Icon(Icons.phone),
-              title: const Text('Nomor Telepon'),
-              subtitle: const Text('+62 812-3456-7890'),
-              onTap: () {},
+            const ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('Nomor Telepon'),
+              subtitle: Text('+62 812-3456-7890'),
             ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Alamat'),
-              subtitle: const Text('Jl. Contoh Alamat No.123'),
-              onTap: () {},
+            const ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Alamat'),
+              subtitle: Text('Jl. Contoh Alamat No.123'),
             ),
             const Spacer(),
             SizedBox(
@@ -58,7 +57,7 @@ class _ProfilState extends State<Profil> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: () {
-                  // aksi logout atau lainnya
+                  Navigator.pop(context); // kembali ke login atau halaman sebelumnya
                 },
                 child: const Text(
                   'Keluar',
