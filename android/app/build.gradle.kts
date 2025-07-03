@@ -32,10 +32,18 @@ android {
     signingConfigs {
         create("release") {
             if (keystorePropertiesFile.exists()) {
-                keyAlias = keystoreProperties.getProperty("keyAlias")
-                keyPassword = keystoreProperties.getProperty("keyPassword")
-                storeFile = file(keystoreProperties.getProperty("storeFile"))
-                storePassword = keystoreProperties.getProperty("storePassword")
+                val keyAliasValue = keystoreProperties.getProperty("keyAlias")
+                val keyPasswordValue = keystoreProperties.getProperty("keyPassword")
+                val storeFileValue = keystoreProperties.getProperty("storeFile")
+                val storePasswordValue = keystoreProperties.getProperty("storePassword")
+                
+                if (keyAliasValue != null && keyPasswordValue != null && 
+                    storeFileValue != null && storePasswordValue != null) {
+                    keyAlias = keyAliasValue
+                    keyPassword = keyPasswordValue
+                    storeFile = file(storeFileValue)
+                    storePassword = storePasswordValue
+                }
             }
         }
     }
@@ -50,10 +58,12 @@ android {
 
     buildTypes {
         getByName("release") {
-            // Menggunakan konfigurasi rilis yang baru dibuat
-            signingConfig = signingConfigs.getByName("release")
+            // Menggunakan konfigurasi rilis jika tersedia
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
 
-            // Mengaktifkan ProGuard dalam sintaks Kotlin
+            // Mengaktifkan optimasi untuk ukuran aplikasi yang lebih kecil
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
