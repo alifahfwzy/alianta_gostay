@@ -98,42 +98,6 @@ class _BerandaPageState extends State<BerandaPage> {
               ),
               const SizedBox(height: 20),
 
-              // Search Bar
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.search, color: Color(0xFF29B6F6)),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Cari hotel impian Anda...',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    Icon(Icons.tune, color: Color(0xFF29B6F6)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
               // Section Title
               const Text(
                 'Hotel Populer',
