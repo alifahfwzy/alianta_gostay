@@ -59,10 +59,7 @@ class _BuatAkunState extends State<BuatAkun> {
               const SizedBox(height: 12),
               buildTextField(_usernameController, 'Masukkan Nama Pengguna'),
               const SizedBox(height: 12),
-              buildTextField(_phoneController, 'Masukkan No Hp'),
-              const SizedBox(height: 12),
-              buildTextField(_addressController, 'Masukkan Alamat'),
-              const SizedBox(height: 24),
+
               // Tombol daftar
               SizedBox(
                 width: double.infinity,
