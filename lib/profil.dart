@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'beranda.dart';
 import 'explore_page.dart';
+import 'tampilan_awal.dart'; // ← sudah disesuaikan
 
 class Profil extends StatefulWidget {
   const Profil({super.key});
@@ -13,11 +15,28 @@ class _ProfilState extends State<Profil> {
   String _namaPengguna = 'Nama Pengguna';
   bool _isEditing = false;
   late TextEditingController _controllerNama;
+  String _bergabungSejak = '';
 
   @override
   void initState() {
     super.initState();
     _controllerNama = TextEditingController(text: _namaPengguna);
+    _loadBergabungSejak();
+  }
+
+  Future<void> _loadBergabungSejak() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? tanggal = prefs.getString('bergabung_sejak');
+
+    if (tanggal == null) {
+      final now = DateTime.now();
+      tanggal = "${now.day}-${now.month}-${now.year}";
+      await prefs.setString('bergabung_sejak', tanggal);
+    }
+
+    setState(() {
+      _bergabungSejak = tanggal!;
+    });
   }
 
   @override
@@ -39,9 +58,7 @@ class _ProfilState extends State<Profil> {
           children: [
             const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage(
-                'assets/images/profile.jpg',
-              ), // ganti path ini sesuai asset kamu
+              backgroundImage: AssetImage('assets/images/profile.jpg'),
             ),
             const SizedBox(height: 16),
             _isEditing
@@ -82,9 +99,10 @@ class _ProfilState extends State<Profil> {
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text('Bergabung sejak:', style: TextStyle(fontSize: 16)),
-                Text('2023', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+              children: [
+                const Text('Bergabung sejak:', style: TextStyle(fontSize: 16)),
+                Text(_bergabungSejak,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
               ],
             ),
             const SizedBox(height: 10),
@@ -92,7 +110,9 @@ class _ProfilState extends State<Profil> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text('Status Akun:', style: TextStyle(fontSize: 16)),
-                Text('Aktif', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.green)),
+                Text('Aktif',
+                    style: TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500, color: Colors.green)),
               ],
             ),
             const Spacer(),
@@ -107,7 +127,11 @@ class _ProfilState extends State<Profil> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: () {
-                  // aksi logout atau lainnya
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const TampilanAwal()),
+                    (route) => false,
+                  );
                 },
                 child: const Text(
                   'Keluar',
@@ -119,27 +143,20 @@ class _ProfilState extends State<Profil> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2, // Profile is selected
+        currentIndex: 2,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
           switch (index) {
             case 0:
-              // Navigate to Beranda page
               Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BerandaPage()),
-              );
+                  context, MaterialPageRoute(builder: (context) => BerandaPage()));
               break;
             case 1:
-              // Navigate to Explore page
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ExplorePage()),
-              );
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ExplorePage()));
               break;
             case 2:
-              // Already on Profile page, do nothing
               break;
           }
         },
