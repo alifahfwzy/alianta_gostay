@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'beranda.dart'; // Import untuk mengakses HotelDatabase
 
 class TambahHotel extends StatefulWidget {
   const TambahHotel({super.key});
@@ -31,6 +32,43 @@ class _TambahHotelState extends State<TambahHotel> {
     _kontak2Controller.dispose();
     _linkGambarController.dispose();
     super.dispose();
+  }
+
+  void _simpanHotel() {
+    if (_formKey.currentState!.validate()) {
+      // Kumpulkan fasilitas yang dipilih
+      List<String> selectedFacilities = [];
+      if (_freeWifi) selectedFacilities.add('Free Wi-Fi');
+      if (_swimmingPool) selectedFacilities.add('Swimming Pool');
+      if (_parking) selectedFacilities.add('Parking');
+      if (_restaurant) selectedFacilities.add('Restaurant');
+      if (_gym) selectedFacilities.add('Gym');
+
+      // Buat objek hotel baru
+      Hotel newHotel = Hotel(
+        name: _namaHotelController.text,
+        location: _alamatController.text,
+        facilities: selectedFacilities,
+        imageUrl:
+            _linkGambarController.text.isEmpty
+                ? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400'
+                : _linkGambarController.text,
+      );
+
+      // Tambah ke database
+      HotelDatabase.addHotel(newHotel);
+
+      // Tampilkan pesan sukses
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Hotel "${newHotel.name}" berhasil ditambahkan'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Kembali ke halaman sebelumnya
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -157,15 +195,7 @@ class _TambahHotelState extends State<TambahHotel> {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              // Process data
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Data hotel ditambahkan')),
-              );
-              // Add your logic to save the data
-            }
-          },
+          onPressed: _simpanHotel,
           child: const Text('Tambahkan', style: TextStyle(color: Colors.white)),
         ),
       ),

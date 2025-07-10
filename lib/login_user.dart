@@ -3,6 +3,23 @@ import 'beranda.dart';
 import 'buat_akun.dart';
 import 'login_admin.dart';
 
+// Kelas untuk menyimpan data user yang terdaftar (simulasi database)
+class UserDatabase {
+  static Map<String, String> registeredUsers = {}; // email -> password
+
+  static bool isUserRegistered(String email) {
+    return registeredUsers.containsKey(email);
+  }
+
+  static bool validateLogin(String email, String password) {
+    return registeredUsers[email] == password;
+  }
+
+  static void registerUser(String email, String password) {
+    registeredUsers[email] = password;
+  }
+}
+
 class LoginUser extends StatefulWidget {
   const LoginUser({super.key});
 
@@ -14,11 +31,47 @@ class _LoginUserState extends State<LoginUser> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Helper method untuk validasi email
+  bool _isValidEmail(String email) {
+    return RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    ).hasMatch(email);
+  }
+
+  // Helper method untuk validasi password
+  bool _isValidPassword(String password) {
+    return password.length >= 5;
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  // Method untuk menampilkan notifikasi user belum terdaftar
+  void _showRegistrationNotification() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.info, color: Colors.white, size: 20),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Email belum terdaftar. Silakan buat akun terlebih dahulu.',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.blue,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        duration: const Duration(seconds: 4),
+      ),
+    );
   }
 
   @override
@@ -179,15 +232,71 @@ class _LoginUserState extends State<LoginUser> {
                     String email = _emailController.text.trim();
                     String password = _passwordController.text;
 
-                    if (email.isNotEmpty && password.isNotEmpty) {
+                    // Validasi input kosong
+                    if (email.isEmpty || password.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Email dan password harus diisi'),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+
+                    // Validasi format email
+                    if (!_isValidEmail(email)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text(
+                            'Format email tidak valid.\nContoh: user@email.com',
+                          ),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+
+                    // Validasi panjang password
+                    if (!_isValidPassword(password)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Password minimal 5 karakter'),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+
+                    // Cek apakah user sudah terdaftar
+                    if (!UserDatabase.isUserRegistered(email)) {
+                      _showRegistrationNotification();
+                      return;
+                    }
+
+                    // Validasi login
+                    if (UserDatabase.validateLogin(email, password)) {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => BerandaPage()),
+                        MaterialPageRoute(
+                          builder: (context) => const BerandaPage(),
+                        ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text('Email dan password harus diisi'),
+                          content: const Text('Email atau password salah'),
                           backgroundColor: Colors.red,
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(

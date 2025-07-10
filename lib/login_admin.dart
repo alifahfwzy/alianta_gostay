@@ -28,7 +28,7 @@ class _LoginAdminState extends State<LoginAdmin> {
       return;
     }
 
-    if (username == "admin" && password == "admin123") {
+    if (username == "admin gostay" && password == "aliantagostay") {
       _showSnackbar("Login admin berhasil!");
       // TODO: Navigasi ke halaman dashboard admin
       Navigator.pushReplacement(

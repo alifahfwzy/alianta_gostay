@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'tambah_hotel.dart';
 import 'tampilan_awal.dart';
+import 'beranda.dart'; // Import untuk mengakses HotelDatabase
 
 class BerandaAdmin extends StatefulWidget {
   const BerandaAdmin({super.key});
@@ -10,19 +11,63 @@ class BerandaAdmin extends StatefulWidget {
 }
 
 class _BerandaAdminState extends State<BerandaAdmin> {
-  final List<Map<String, String>> hotels = [
-    {"name": "Cozy Inn", "address": "456 Oak Ave, Anytown"},
-    {"name": "Luxury Suites", "address": "789 Pine Ln, Anytown"},
-    {"name": "INI PARAGONNN", "address": "123 Main St, Anytown"},
-    {"name": "Cozy Inn", "address": "456 Oak Ave, Anytown"},
-    {"name": "Luxury Suites", "address": "789 Pine Ln, Anytown"},
-  ];
-
   void _tambahHotel() {
     // Navigate to Tambah Hotel page
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const TambahHotel()),
+    ).then((_) {
+      // Refresh halaman setelah kembali dari tambah hotel
+      setState(() {});
+    });
+  }
+
+  void _editHotel(int index) {
+    // Untuk sementara, tampilkan snackbar
+    // Nanti bisa diupdate untuk navigasi ke halaman edit
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Fitur edit hotel "${HotelDatabase.hotels[index].name}" akan segera tersedia',
+        ),
+        backgroundColor: Colors.orange,
+      ),
+    );
+  }
+
+  void _hapusHotel(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi Hapus'),
+          content: Text(
+            'Apakah Anda yakin ingin menghapus hotel "${HotelDatabase.hotels[index].name}"?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Batal'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  HotelDatabase.deleteHotel(index);
+                });
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Hotel berhasil dihapus'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('Hapus', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -63,8 +108,9 @@ class _BerandaAdminState extends State<BerandaAdmin> {
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
-                itemCount: hotels.length,
+                itemCount: HotelDatabase.hotels.length,
                 itemBuilder: (context, index) {
+                  final hotel = HotelDatabase.hotels[index];
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 6),
                     padding: const EdgeInsets.all(16),
@@ -75,17 +121,79 @@ class _BerandaAdminState extends State<BerandaAdmin> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          hotels[index]["name"]!,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          hotels[index]["address"]!,
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    hotel.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    hotel.location,
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Fasilitas: ${hotel.facilities.join(', ')}',
+                                    style: const TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuButton<String>(
+                              onSelected: (value) {
+                                if (value == 'edit') {
+                                  _editHotel(index);
+                                } else if (value == 'delete') {
+                                  _hapusHotel(index);
+                                }
+                              },
+                              itemBuilder:
+                                  (BuildContext context) => [
+                                    const PopupMenuItem<String>(
+                                      value: 'edit',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.edit,
+                                            size: 16,
+                                            color: Colors.blue,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('Edit'),
+                                        ],
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.delete,
+                                            size: 16,
+                                            color: Colors.red,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('Hapus'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                              child: const Icon(Icons.more_vert),
+                            ),
+                          ],
                         ),
                       ],
                     ),
