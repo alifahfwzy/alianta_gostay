@@ -13,7 +13,7 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   final TextEditingController _searchController = TextEditingController();
-  int _selectedIndex = 1; // Cari tab is selected
+  final int _selectedIndex = 1; // Cari tab is selected
   List<Hotel> _allHotels = [];
   List<Hotel> _filteredHotels = [];
   bool _isLoading = true;
