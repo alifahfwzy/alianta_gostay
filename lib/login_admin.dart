@@ -101,7 +101,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                   TextField(
                     controller: _usernameController,
                     decoration: InputDecoration(
-                      hintText: 'Masukkan username admin',
+                      hintText: 'Masukkan username ',
                       hintStyle: TextStyle(color: Colors.grey[500]),
                       filled: true,
                       fillColor: Colors.grey[100],
@@ -131,7 +131,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      hintText: 'Masukkan password admin',
+                      hintText: 'Masukkan password ',
                       hintStyle: TextStyle(color: Colors.grey[500]),
                       filled: true,
                       fillColor: Colors.grey[100],
