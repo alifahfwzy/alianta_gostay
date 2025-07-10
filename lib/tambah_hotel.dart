@@ -60,16 +60,24 @@ class _TambahHotelState extends State<TambahHotel> {
         );
 
         // Simpan ke database
-        await HotelService.addHotel(newHotel);
+        final result = await HotelService.addHotel(newHotel);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Hotel "${newHotel.name}" berhasil ditambahkan'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        Navigator.of(context).pop();
+        if (result['success'] == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Hotel "${newHotel.name}" berhasil ditambahkan'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.of(context).pop();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Gagal menambahkan hotel: ${result['message']}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

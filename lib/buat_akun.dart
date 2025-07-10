@@ -83,6 +83,10 @@ class _BuatAkunState extends State<BuatAkun> {
       // Menampilkan status untuk debugging
       print('💡 Mencoba mendaftarkan: $email, $username');
 
+      // Tambahkan delay untuk memastikan koneksi stabil
+      print('⏳ Menunggu koneksi...');
+      await Future.delayed(const Duration(seconds: 1));
+
       // Coba mendaftarkan user
       final result = await UserService.registerUser(
         email: email,
@@ -101,7 +105,22 @@ class _BuatAkunState extends State<BuatAkun> {
       }
     } catch (e) {
       print('❌ Error registrasi exception: $e');
-      _showSnackBar('Terjadi kesalahan: $e', Colors.red);
+
+      // Handling error khusus
+      String errorMessage;
+      if (e.toString().contains('timeout') ||
+          e.toString().contains('connection')) {
+        errorMessage =
+            'Gagal terhubung ke server. Periksa koneksi internet Anda.';
+      } else if (e.toString().contains('not found')) {
+        errorMessage =
+            'Layanan belum tersedia. Silakan coba beberapa saat lagi.';
+      } else {
+        errorMessage =
+            'Terjadi kesalahan: ${e.toString().split('Exception:').last.trim()}';
+      }
+
+      _showSnackBar(errorMessage, Colors.red);
     } finally {
       _setLoading(false);
     }

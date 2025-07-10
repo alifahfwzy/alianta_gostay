@@ -8,17 +8,36 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
+    print('🔄 Memulai inisialisasi aplikasi GoStay...');
+
     // Initialize Supabase
     await SupabaseConfig.initialize();
+    print('✅ Supabase berhasil diinisialisasi');
 
-    // Test koneksi (optional, bisa dihapus di production)
-    await SupabaseConfig.testConnection();
+    // Pastikan kita menggunakan URL dan credentials yang benar
+    print('📝 Menggunakan Supabase URL: ${SupabaseConfig.supabaseUrl}');
 
-    // Setup database tables if they don't exist
-    await SetupDatabase.setupAllTables();
+    try {
+      // Test koneksi dengan timeout
+      print('🔄 Melakukan test koneksi Supabase...');
+      bool connected = await SupabaseConfig.testConnection();
 
-    // Create default admin if not exists
-    await AdminService.createDefaultAdmin();
+      if (connected) {
+        print('✅ Koneksi ke Supabase berhasil');
+
+        // Check if database tables exist (doesn't create them)
+        print('🔄 Memeriksa keberadaan tabel di database...');
+        await SetupDatabase.setupAllTables();
+
+        // Check for default admin
+        print('🔄 Memeriksa keberadaan admin default...');
+        await AdminService.createDefaultAdmin();
+      } else {
+        print('❌ Gagal terhubung ke Supabase');
+      }
+    } catch (connectionError) {
+      print('❌ Error saat test koneksi: $connectionError');
+    }
 
     print('🚀 Aplikasi GoStay siap dijalankan!');
   } catch (e) {

@@ -25,12 +25,15 @@ class HotelDatabase {
   // Add hotel ke Supabase
   static Future<bool> addHotel(Hotel hotel) async {
     try {
-      final success = await HotelService.addHotel(hotel);
-      if (success) {
+      final result = await HotelService.addHotel(hotel);
+      if (result['success'] == true) {
         await loadHotels(); // Refresh local data
         print('✅ Hotel berhasil ditambah ke database');
+        return true;
+      } else {
+        print('❌ Gagal menambah hotel: ${result['message']}');
+        return false;
       }
-      return success;
     } catch (e) {
       print('❌ Error adding hotel: $e');
       return false;
@@ -41,12 +44,15 @@ class HotelDatabase {
   static Future<bool> deleteHotel(int index) async {
     try {
       if (index < _hotels.length && _hotels[index].id != null) {
-        final success = await HotelService.deleteHotel(_hotels[index].id!);
-        if (success) {
+        final result = await HotelService.deleteHotel(_hotels[index].id!);
+        if (result['success'] == true) {
           await loadHotels(); // Refresh local data
           print('✅ Hotel berhasil dihapus dari database');
+          return true;
+        } else {
+          print('❌ Gagal menghapus hotel: ${result['message']}');
+          return false;
         }
-        return success;
       }
       return false;
     } catch (e) {
@@ -59,15 +65,18 @@ class HotelDatabase {
   static Future<bool> updateHotel(int index, Hotel hotel) async {
     try {
       if (index < _hotels.length && _hotels[index].id != null) {
-        final success = await HotelService.updateHotel(
+        final result = await HotelService.updateHotel(
           _hotels[index].id!,
           hotel,
         );
-        if (success) {
+        if (result['success'] == true) {
           await loadHotels(); // Refresh local data
           print('✅ Hotel berhasil diupdate di database');
+          return true;
+        } else {
+          print('❌ Gagal mengupdate hotel: ${result['message']}');
+          return false;
         }
-        return success;
       }
       return false;
     } catch (e) {
