@@ -14,8 +14,6 @@ class _TambahHotelState extends State<TambahHotel> {
   final TextEditingController _namaHotelController = TextEditingController();
   final TextEditingController _deskripsiController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
-  final TextEditingController _kontak1Controller = TextEditingController();
-  final TextEditingController _kontak2Controller = TextEditingController();
   final TextEditingController _linkGambarController = TextEditingController();
 
   bool _freeWifi = false;
@@ -30,8 +28,6 @@ class _TambahHotelState extends State<TambahHotel> {
     _namaHotelController.dispose();
     _deskripsiController.dispose();
     _alamatController.dispose();
-    _kontak1Controller.dispose();
-    _kontak2Controller.dispose();
     _linkGambarController.dispose();
     super.dispose();
   }
@@ -66,7 +62,6 @@ class _TambahHotelState extends State<TambahHotel> {
         // Simpan ke database
         await HotelService.addHotel(newHotel);
 
-        // Tampilkan pesan sukses
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Hotel "${newHotel.name}" berhasil ditambahkan'),
@@ -74,7 +69,6 @@ class _TambahHotelState extends State<TambahHotel> {
           ),
         );
 
-        // Kembali ke halaman sebelumnya
         Navigator.of(context).pop();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -128,19 +122,6 @@ class _TambahHotelState extends State<TambahHotel> {
               _buildTextField(
                 controller: _alamatController,
                 labelText: 'Alamat',
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _kontak1Controller,
-                labelText: 'Kontak 1',
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _kontak2Controller,
-                labelText: 'Kontak 2 (Opsional)',
-                keyboardType: TextInputType.phone,
-                isOptional: true,
               ),
               const SizedBox(height: 16),
               _buildTextField(
@@ -263,12 +244,6 @@ class _TambahHotelState extends State<TambahHotel> {
             value.isNotEmpty &&
             !Uri.parse(value).isAbsolute) {
           return 'Link gambar tidak valid';
-        }
-        if (keyboardType == TextInputType.phone &&
-            value != null &&
-            value.isNotEmpty &&
-            !RegExp(r'^[0-9]+$').hasMatch(value)) {
-          return 'Kontak tidak valid';
         }
         return null;
       },
