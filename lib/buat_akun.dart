@@ -80,6 +80,10 @@ class _BuatAkunState extends State<BuatAkun> {
     _setLoading(true);
 
     try {
+      // Menampilkan status untuk debugging
+      print('💡 Mencoba mendaftarkan: $email, $username');
+      
+      // Coba mendaftarkan user
       final result = await UserService.registerUser(
         email: email,
         password: password,
@@ -89,9 +93,13 @@ class _BuatAkunState extends State<BuatAkun> {
       if (result['success']) {
         _showSuccessDialog();
       } else {
-        _showSnackBar(result['message'], Colors.red);
+        // Menangani kegagalan registrasi dengan pesan yang lebih spesifik
+        final String errorMsg = result['message'] ?? 'Terjadi kesalahan saat registrasi';
+        _showSnackBar(errorMsg, Colors.red);
+        print('❌ Registrasi gagal: $errorMsg');
       }
     } catch (e) {
+      print('❌ Error registrasi exception: $e');
       _showSnackBar('Terjadi kesalahan: $e', Colors.red);
     } finally {
       _setLoading(false);

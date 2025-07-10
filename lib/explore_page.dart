@@ -152,7 +152,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                     ),
                   ),
-                  const Icon(Icons.tune, color: Color(0xFF29B6F6)),
+                  //const Icon(Icons.tune, color: Color(0xFF29B6F6)),
                 ],
               ),
             ),
