@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'beranda.dart';
 
 class BuatAkun extends StatefulWidget {
   const BuatAkun({super.key});
@@ -11,7 +10,8 @@ class BuatAkun extends StatefulWidget {
 class _BuatAkunState extends State<BuatAkun> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -58,47 +58,17 @@ class _BuatAkunState extends State<BuatAkun> {
               const SizedBox(height: 12),
               buildTextField(_usernameController, 'Masukkan Nama Pengguna'),
               const SizedBox(height: 12),
-
+              buildTextField(_phoneController, 'Masukkan No Hp'),
+              const SizedBox(height: 12),
+              buildTextField(_addressController, 'Masukkan Alamat'),
+              const SizedBox(height: 24),
               // Tombol daftar
               SizedBox(
                 width: double.infinity,
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Validasi form (sederhana)
-                    String email = _emailController.text;
-                    String password = _passwordController.text;
-                    String confirmPassword = _confirmPasswordController.text;
-                    String username = _usernameController.text;
-
-                    if (email.isNotEmpty &&
-                        password.isNotEmpty &&
-                        confirmPassword.isNotEmpty &&
-                        username.isNotEmpty) {
-                      if (password == confirmPassword) {
-                        // Navigate to Beranda after successful registration
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BerandaPage(),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Password dan konfirmasi password tidak sama',
-                            ),
-                          ),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Semua field harus diisi'),
-                        ),
-                      );
-                    }
+                    // proses pendaftaran
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightBlue[100],
