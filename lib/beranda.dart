@@ -1,92 +1,143 @@
 import 'package:flutter/material.dart';
 import 'explore_page.dart';
 import 'profil.dart';
+import 'services/hotel_service.dart';
+import 'models/hotel.dart';
 
-// Model untuk data hotel
-class Hotel {
-  final String name;
-  final String location;
-  final List<String> facilities;
-  final String imageUrl;
-
-  Hotel({
-    required this.name,
-    required this.location,
-    required this.facilities,
-    required this.imageUrl,
-  });
-}
-
-// Database simulasi untuk hotel (akan dikelola dari admin)
+// Database untuk hotel yang terintegrasi dengan Supabase
 class HotelDatabase {
-  static List<Hotel> hotels = [
-    Hotel(
-      name: 'Hotel Sahid Jaya Solo',
-      location: 'Jl. Gajah Mada',
-      facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant'],
-      imageUrl:
-          'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
-    ),
-    Hotel(
-      name: 'The Sunan Hotel Solo',
-      location: 'Jl. Adi Sucipto',
-      facilities: ['Free Wi-Fi', 'Parking', 'Gym', 'Restaurant'],
-      imageUrl:
-          'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400',
-    ),
-    Hotel(
-      name: 'Alila Solo',
-      location: 'Jl. Slamet Riyadi',
-      facilities: ['Free Wi-Fi', 'Swimming Pool', 'Parking', 'Gym'],
-      imageUrl:
-          'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
-    ),
-    Hotel(
-      name: 'Novotel Solo',
-      location: 'Jl. Slamet Riyadi',
-      facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant', 'Parking'],
-      imageUrl:
-          'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400',
-    ),
-    Hotel(
-      name: 'Lor In Hotel Solo',
-      location: 'Jl. Adi Sucipto',
-      facilities: ['Free Wi-Fi', 'Parking', 'Restaurant'],
-      imageUrl:
-          'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400',
-    ),
-    Hotel(
-      name: 'Grand Orchid Solo',
-      location: 'Jl. Slamet Riyadi',
-      facilities: [
-        'Free Wi-Fi',
-        'Swimming Pool',
-        'Gym',
-        'Restaurant',
-        'Parking',
-      ],
-      imageUrl:
-          'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400',
-    ),
-  ];
+  static List<Hotel> _hotels = [];
 
-  // Method untuk menambah hotel (akan digunakan dari admin dashboard)
-  static void addHotel(Hotel hotel) {
-    hotels.add(hotel);
-  }
+  static List<Hotel> get hotels => _hotels;
 
-  // Method untuk update hotel
-  static void updateHotel(int index, Hotel hotel) {
-    if (index >= 0 && index < hotels.length) {
-      hotels[index] = hotel;
+  // Load hotels dari Supabase
+  static Future<void> loadHotels() async {
+    try {
+      _hotels = await HotelService.getAllHotels();
+      print('✅ Berhasil load ${_hotels.length} hotel dari database');
+    } catch (e) {
+      print('❌ Error loading hotels: $e');
+      // Fallback ke data dummy jika error
+      _hotels = _getDummyHotels();
     }
   }
 
-  // Method untuk hapus hotel
-  static void deleteHotel(int index) {
-    if (index >= 0 && index < hotels.length) {
-      hotels.removeAt(index);
+  // Add hotel ke Supabase
+  static Future<bool> addHotel(Hotel hotel) async {
+    try {
+      final success = await HotelService.addHotel(hotel);
+      if (success) {
+        await loadHotels(); // Refresh local data
+        print('✅ Hotel berhasil ditambah ke database');
+      }
+      return success;
+    } catch (e) {
+      print('❌ Error adding hotel: $e');
+      return false;
     }
+  }
+
+  // Delete hotel dari Supabase
+  static Future<bool> deleteHotel(int index) async {
+    try {
+      if (index < _hotels.length && _hotels[index].id != null) {
+        final success = await HotelService.deleteHotel(_hotels[index].id!);
+        if (success) {
+          await loadHotels(); // Refresh local data
+          print('✅ Hotel berhasil dihapus dari database');
+        }
+        return success;
+      }
+      return false;
+    } catch (e) {
+      print('❌ Error deleting hotel: $e');
+      return false;
+    }
+  }
+
+  // Update hotel di Supabase
+  static Future<bool> updateHotel(int index, Hotel hotel) async {
+    try {
+      if (index < _hotels.length && _hotels[index].id != null) {
+        final success = await HotelService.updateHotel(
+          _hotels[index].id!,
+          hotel,
+        );
+        if (success) {
+          await loadHotels(); // Refresh local data
+          print('✅ Hotel berhasil diupdate di database');
+        }
+        return success;
+      }
+      return false;
+    } catch (e) {
+      print('❌ Error updating hotel: $e');
+      return false;
+    }
+  }
+
+  // Search hotels dari Supabase
+  static Future<List<Hotel>> searchHotels(String query) async {
+    try {
+      return await HotelService.searchHotels(query);
+    } catch (e) {
+      print('❌ Error searching hotels: $e');
+      return [];
+    }
+  }
+
+  // Data dummy sebagai fallback
+  static List<Hotel> _getDummyHotels() {
+    return [
+      Hotel(
+        name: 'Hotel Sahid Jaya Solo',
+        location: 'Jl. Gajah Mada',
+        facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
+      ),
+      Hotel(
+        name: 'The Sunan Hotel Solo',
+        location: 'Jl. Adi Sucipto',
+        facilities: ['Free Wi-Fi', 'Parking', 'Gym', 'Restaurant'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400',
+      ),
+      Hotel(
+        name: 'Alila Solo',
+        location: 'Jl. Slamet Riyadi',
+        facilities: ['Free Wi-Fi', 'Swimming Pool', 'Parking', 'Gym'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
+      ),
+      Hotel(
+        name: 'Novotel Solo',
+        location: 'Jl. Slamet Riyadi',
+        facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant', 'Parking'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400',
+      ),
+      Hotel(
+        name: 'Lor In Hotel Solo',
+        location: 'Jl. Adi Sucipto',
+        facilities: ['Free Wi-Fi', 'Parking', 'Restaurant'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400',
+      ),
+      Hotel(
+        name: 'Grand Orchid Solo',
+        location: 'Jl. Slamet Riyadi',
+        facilities: [
+          'Free Wi-Fi',
+          'Swimming Pool',
+          'Gym',
+          'Restaurant',
+          'Parking',
+        ],
+        imageUrl:
+            'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400',
+      ),
+    ];
   }
 }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'beranda.dart';
 import 'profil.dart';
+import 'services/hotel_service.dart';
+import 'models/hotel.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -12,13 +14,14 @@ class ExplorePage extends StatefulWidget {
 class _ExplorePageState extends State<ExplorePage> {
   final TextEditingController _searchController = TextEditingController();
   int _selectedIndex = 1; // Cari tab is selected
-  List<Map<String, String>> _allHotels = [];
-  List<Map<String, String>> _filteredHotels = [];
+  List<Hotel> _allHotels = [];
+  List<Hotel> _filteredHotels = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _initializeHotels();
+    _loadHotels();
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -29,46 +32,57 @@ class _ExplorePageState extends State<ExplorePage> {
     super.dispose();
   }
 
-  void _initializeHotels() {
+  Future<void> _loadHotels() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final hotels = await HotelService.getAllHotels();
+      setState(() {
+        _allHotels = hotels;
+        _filteredHotels = List.from(hotels);
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      // Fallback to dummy data if connection fails
+      _initializeDummyHotels();
+    }
+  }
+
+  void _initializeDummyHotels() {
     _allHotels = [
-      {
-        'name': 'Hotel Sahid Jaya Solo',
-        'location': 'Jl. Gajah Mada, Solo',
-        'rating': '4.5',
-        'image': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
-      },
-      {
-        'name': 'The Sunan Hotel Solo',
-        'location': 'Jl. Adi Sucipto, Solo',
-        'rating': '4.7',
-        'image': 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300&fit=crop',
-      },
-      {
-        'name': 'Alila Solo',
-        'location': 'Jl. Slamet Riyadi, Solo',
-        'rating': '4.8',
-        'image': 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop',
-      },
-      {
-        'name': 'Novotel Solo',
-        'location': 'Jl. Slamet Riyadi, Solo',
-        'rating': '4.6',
-        'image': 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop',
-      },
-      {
-        'name': 'Lor In Hotel Solo',
-        'location': 'Jl. Adi Sucipto, Solo',
-        'rating': '4.4',
-        'image': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop',
-      },
-      {
-        'name': 'Grand Orchid Solo',
-        'location': 'Jl. Slamet Riyadi, Solo',
-        'rating': '4.3',
-        'image': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&h=300&fit=crop',
-      },
+      Hotel(
+        name: 'Hotel Sahid Jaya Solo',
+        location: 'Jl. Gajah Mada, Solo',
+        rating: 4.5,
+        facilities: ['Wi-Fi', 'AC', 'Restaurant'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
+      ),
+      Hotel(
+        name: 'The Sunan Hotel Solo',
+        location: 'Jl. Adi Sucipto, Solo',
+        rating: 4.7,
+        facilities: ['Wi-Fi', 'Pool', 'Spa'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300&fit=crop',
+      ),
+      Hotel(
+        name: 'Alila Solo',
+        location: 'Jl. Slamet Riyadi, Solo',
+        rating: 4.8,
+        facilities: ['Wi-Fi', 'Gym', 'Restaurant'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop',
+      ),
     ];
-    _filteredHotels = List.from(_allHotels);
+    setState(() {
+      _filteredHotels = List.from(_allHotels);
+    });
   }
 
   void _onSearchChanged() {
@@ -77,11 +91,12 @@ class _ExplorePageState extends State<ExplorePage> {
       if (query.isEmpty) {
         _filteredHotels = List.from(_allHotels);
       } else {
-        _filteredHotels = _allHotels.where((hotel) {
-          final hotelName = hotel['name']!.toLowerCase();
-          final hotelLocation = hotel['location']!.toLowerCase();
-          return hotelName.contains(query) || hotelLocation.contains(query);
-        }).toList();
+        _filteredHotels =
+            _allHotels.where((hotel) {
+              final hotelName = hotel.name.toLowerCase();
+              final hotelLocation = hotel.location.toLowerCase();
+              return hotelName.contains(query) || hotelLocation.contains(query);
+            }).toList();
       }
     });
   }
@@ -145,15 +160,19 @@ class _ExplorePageState extends State<ExplorePage> {
 
           // Hotel List
           Expanded(
-            child: _filteredHotels.isEmpty && _searchController.text.isNotEmpty
-                ? _buildNoResultsWidget()
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: _filteredHotels.length,
-                    itemBuilder: (context, index) {
-                      return _buildHotelCard(_filteredHotels[index]);
-                    },
-                  ),
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _filteredHotels.isEmpty &&
+                        _searchController.text.isNotEmpty
+                    ? _buildNoResultsWidget()
+                    : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: _filteredHotels.length,
+                      itemBuilder: (context, index) {
+                        return _buildHotelCard(_filteredHotels[index]);
+                      },
+                    ),
           ),
         ],
       ),
@@ -205,7 +224,7 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  Widget _buildHotelCard(Map<String, String> hotel) {
+  Widget _buildHotelCard(Hotel hotel) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -234,7 +253,7 @@ class _ExplorePageState extends State<ExplorePage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(11),
                 child: Image.network(
-                  hotel['image']!,
+                  hotel.imageUrl,
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -245,7 +264,9 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                       child: const Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF29B6F6)),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color(0xFF29B6F6),
+                          ),
                           strokeWidth: 2,
                         ),
                       ),
@@ -288,7 +309,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 children: [
                   // Hotel Name
                   Text(
-                    hotel['name']!,
+                    hotel.name,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -308,7 +329,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          hotel['location']!,
+                          hotel.location,
                           style: const TextStyle(
                             fontSize: 13,
                             color: Colors.grey,
@@ -325,7 +346,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       const Icon(Icons.star, color: Colors.amber, size: 16),
                       const SizedBox(width: 4),
                       Text(
-                        hotel['rating']!,
+                        hotel.rating.toString(),
                         style: const TextStyle(
                           fontSize: 13,
                           color: Colors.grey,
@@ -370,11 +391,7 @@ class _ExplorePageState extends State<ExplorePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.search_off,
-            size: 80,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             'Hotel tidak ditemukan',
@@ -388,10 +405,7 @@ class _ExplorePageState extends State<ExplorePage> {
           Text(
             'Coba kata kunci lain atau\nperiksa ejaan Anda',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
           ),
           const SizedBox(height: 20),
           ElevatedButton(

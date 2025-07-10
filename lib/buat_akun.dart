@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login_user.dart'; // Import untuk mengakses UserDatabase
+import 'login_user.dart';
+import 'services/user_service.dart';
 
 class BuatAkun extends StatefulWidget {
   const BuatAkun({super.key});
@@ -18,6 +19,7 @@ class _BuatAkunState extends State<BuatAkun> {
   // Variabel untuk mengontrol visibility password
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  bool _isLoading = false;
 
   // Helper method untuk validasi email
   bool _isValidEmail(String email) {
@@ -31,8 +33,15 @@ class _BuatAkunState extends State<BuatAkun> {
     return password.length >= 5;
   }
 
+  // Method untuk set loading state
+  void _setLoading(bool loading) {
+    setState(() {
+      _isLoading = loading;
+    });
+  }
+
   // Method untuk menangani proses registrasi
-  void _handleRegistration() {
+  Future<void> _handleRegistration() async {
     String email = _emailController.text.trim();
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
@@ -68,20 +77,25 @@ class _BuatAkunState extends State<BuatAkun> {
       return;
     }
 
-    // Cek apakah email sudah terdaftar
-    if (UserDatabase.isUserRegistered(email)) {
-      _showSnackBar(
-        'Email sudah terdaftar.\nSilakan gunakan email lain atau masuk dengan akun yang ada.',
-        Colors.red,
+    _setLoading(true);
+
+    try {
+      final result = await UserService.registerUser(
+        email: email,
+        password: password,
+        username: username,
       );
-      return;
+
+      if (result['success']) {
+        _showSuccessDialog();
+      } else {
+        _showSnackBar(result['message'], Colors.red);
+      }
+    } catch (e) {
+      _showSnackBar('Terjadi kesalahan: $e', Colors.red);
+    } finally {
+      _setLoading(false);
     }
-
-    // Registrasi berhasil
-    UserDatabase.registerUser(email, password);
-
-    // Tampilkan pesan sukses dan kembali ke halaman login
-    _showSuccessDialog();
   }
 
   // Method untuk menampilkan SnackBar
@@ -213,9 +227,9 @@ class _BuatAkunState extends State<BuatAkun> {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 40),
-              
+
               // Input fields
               buildTextField(_emailController, 'Masukkan Email'),
               const SizedBox(height: 16),
@@ -243,15 +257,13 @@ class _BuatAkunState extends State<BuatAkun> {
                 },
               ),
               const SizedBox(height: 32),
-              
+
               // Tombol daftar
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                    _handleRegistration();
-                  },
+                  onPressed: _isLoading ? null : _handleRegistration,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
@@ -260,13 +272,26 @@ class _BuatAkunState extends State<BuatAkun> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Daftar',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
+                  child:
+                      _isLoading
+                          ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                          : const Text(
+                            'Daftar',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                 ),
               ),
-              
+
               const SizedBox(height: 20),
             ],
           ),
@@ -298,10 +323,7 @@ class _BuatAkunState extends State<BuatAkun> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.blue,
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
@@ -342,10 +364,7 @@ class _BuatAkunState extends State<BuatAkun> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.blue,
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,

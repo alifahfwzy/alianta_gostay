@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'tambah_hotel.dart';
 import 'tampilan_awal.dart';
-import 'beranda.dart'; // Import untuk mengakses HotelDatabase
+import 'services/hotel_service.dart';
+import 'models/hotel.dart';
 
 class BerandaAdmin extends StatefulWidget {
   const BerandaAdmin({super.key});
@@ -11,6 +12,45 @@ class BerandaAdmin extends StatefulWidget {
 }
 
 class _BerandaAdminState extends State<BerandaAdmin> {
+  List<Hotel> _hotels = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHotels();
+  }
+
+  Future<void> _loadHotels() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final hotels = await HotelService.getAllHotels();
+      setState(() {
+        _hotels = hotels;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showSnackBar('Gagal memuat data hotel: $e', Colors.red);
+    }
+  }
+
+  void _showSnackBar(String message, Color backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+
   void _tambahHotel() {
     // Navigate to Tambah Hotel page
     Navigator.push(
@@ -18,7 +58,7 @@ class _BerandaAdminState extends State<BerandaAdmin> {
       MaterialPageRoute(builder: (context) => const TambahHotel()),
     ).then((_) {
       // Refresh halaman setelah kembali dari tambah hotel
-      setState(() {});
+      _loadHotels();
     });
   }
 
@@ -28,21 +68,21 @@ class _BerandaAdminState extends State<BerandaAdmin> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Fitur edit hotel "${HotelDatabase.hotels[index].name}" akan segera tersedia',
+          'Fitur edit hotel "${_hotels[index].name}" akan segera tersedia',
         ),
         backgroundColor: Colors.orange,
       ),
     );
   }
 
-  void _hapusHotel(int index) {
+  Future<void> _hapusHotel(int index) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Konfirmasi Hapus'),
           content: Text(
-            'Apakah Anda yakin ingin menghapus hotel "${HotelDatabase.hotels[index].name}"?',
+            'Apakah Anda yakin ingin menghapus hotel "${_hotels[index].name}"?',
           ),
           actions: [
             TextButton(
@@ -50,17 +90,16 @@ class _BerandaAdminState extends State<BerandaAdmin> {
               child: const Text('Batal'),
             ),
             ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  HotelDatabase.deleteHotel(index);
-                });
+              onPressed: () async {
                 Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Hotel berhasil dihapus'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+
+                try {
+                  await HotelService.deleteHotel(_hotels[index].id!);
+                  _showSnackBar('Hotel berhasil dihapus', Colors.green);
+                  _loadHotels(); // Refresh data
+                } catch (e) {
+                  _showSnackBar('Gagal menghapus hotel: $e', Colors.red);
+                }
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               child: const Text('Hapus', style: TextStyle(color: Colors.white)),
@@ -106,101 +145,135 @@ class _BerandaAdminState extends State<BerandaAdmin> {
               ),
             ),
             const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: HotelDatabase.hotels.length,
-                itemBuilder: (context, index) {
-                  final hotel = HotelDatabase.hotels[index];
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 6),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+            _isLoading
+                ? const Expanded(
+                  child: Center(child: CircularProgressIndicator()),
+                )
+                : _hotels.isEmpty
+                ? const Expanded(
+                  child: Center(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    hotel.name,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    hotel.location,
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Fasilitas: ${hotel.facilities.join(', ')}',
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            PopupMenuButton<String>(
-                              onSelected: (value) {
-                                if (value == 'edit') {
-                                  _editHotel(index);
-                                } else if (value == 'delete') {
-                                  _hapusHotel(index);
-                                }
-                              },
-                              itemBuilder:
-                                  (BuildContext context) => [
-                                    const PopupMenuItem<String>(
-                                      value: 'edit',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.edit,
-                                            size: 16,
-                                            color: Colors.blue,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text('Edit'),
-                                        ],
-                                      ),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: 'delete',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.delete,
-                                            size: 16,
-                                            color: Colors.red,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text('Hapus'),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                              child: const Icon(Icons.more_vert),
-                            ),
-                          ],
+                        Icon(
+                          Icons.hotel_outlined,
+                          size: 64,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Belum ada hotel',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Tambahkan hotel pertama Anda',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                )
+                : Expanded(
+                  child: ListView.builder(
+                    itemCount: _hotels.length,
+                    itemBuilder: (context, index) {
+                      final hotel = _hotels[index];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        hotel.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        hotel.location,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Fasilitas: ${hotel.facilities.join(', ')}',
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuButton<String>(
+                                  onSelected: (value) {
+                                    if (value == 'edit') {
+                                      _editHotel(index);
+                                    } else if (value == 'delete') {
+                                      _hapusHotel(index);
+                                    }
+                                  },
+                                  itemBuilder:
+                                      (BuildContext context) => [
+                                        const PopupMenuItem<String>(
+                                          value: 'edit',
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.edit,
+                                                size: 16,
+                                                color: Colors.blue,
+                                              ),
+                                              SizedBox(width: 8),
+                                              Text('Edit'),
+                                            ],
+                                          ),
+                                        ),
+                                        const PopupMenuItem<String>(
+                                          value: 'delete',
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.delete,
+                                                size: 16,
+                                                color: Colors.red,
+                                              ),
+                                              SizedBox(width: 8),
+                                              Text('Hapus'),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                  child: const Icon(Icons.more_vert),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
             Row(
               children: [
                 Expanded(
