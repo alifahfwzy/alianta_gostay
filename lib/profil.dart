@@ -37,12 +37,6 @@ class _ProfilState extends State<Profil> {
               'namauser@gmail.com',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Alamat'),
-              subtitle: const Text('Jl. Contoh Alamat No.123'),
-              onTap: () {},
-            ),
             const Spacer(),
             SizedBox(
               width: double.infinity,
