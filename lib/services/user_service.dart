@@ -14,12 +14,16 @@ class UserService {
       try {
         // Check if email already exists
         final existingUser =
-            await _client.from('users').select().eq('email', email).maybeSingle();
+            await _client
+                .from('users')
+                .select()
+                .eq('email', email)
+                .maybeSingle();
 
         if (existingUser != null) {
           return {'success': false, 'message': 'Email sudah terdaftar'};
         }
-        
+
         // Insert new user
         await _client.from('users').insert({
           'email': email,
@@ -30,30 +34,31 @@ class UserService {
         return {'success': true, 'message': 'Registrasi berhasil'};
       } catch (e) {
         print('Error checking/inserting user: $e');
-        
+
         // Check if the error is because the table doesn't exist
         if (e.toString().contains('relation "users" does not exist')) {
           // Try to create the table
           try {
             await SupabaseConfig.createUsersTable();
-            
+
             // Try again after table creation
             await _client.from('users').insert({
               'email': email,
               'password': password,
               'username': username,
             });
-            
+
             return {'success': true, 'message': 'Registrasi berhasil'};
           } catch (tableError) {
             print('Error creating users table: $tableError');
             return {
-              'success': false, 
-              'message': 'Tabel users belum ada. Silahkan hubungi administrator.'
+              'success': false,
+              'message':
+                  'Tabel users belum ada. Silahkan hubungi administrator.',
             };
           }
         }
-        
+
         return {'success': false, 'message': 'Terjadi kesalahan: $e'};
       }
     } catch (e) {
