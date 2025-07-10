@@ -52,24 +52,18 @@ class _BerandaAdminState extends State<BerandaAdmin> {
   }
 
   void _tambahHotel() {
-    // Navigate to Tambah Hotel page
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const TambahHotel()),
     ).then((_) {
-      // Refresh halaman setelah kembali dari tambah hotel
       _loadHotels();
     });
   }
 
   void _editHotel(int index) {
-    // Untuk sementara, tampilkan snackbar
-    // Nanti bisa diupdate untuk navigasi ke halaman edit
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Fitur edit hotel "${_hotels[index].name}" akan segera tersedia',
-        ),
+      const SnackBar(
+        content: Text('Fitur edit hotel akan segera tersedia'),
         backgroundColor: Colors.orange,
       ),
     );
@@ -92,11 +86,10 @@ class _BerandaAdminState extends State<BerandaAdmin> {
             ElevatedButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-
                 try {
                   await HotelService.deleteHotel(_hotels[index].id!);
                   _showSnackBar('Hotel berhasil dihapus', Colors.green);
-                  _loadHotels(); // Refresh data
+                  _loadHotels();
                 } catch (e) {
                   _showSnackBar('Gagal menghapus hotel: $e', Colors.red);
                 }
@@ -111,11 +104,10 @@ class _BerandaAdminState extends State<BerandaAdmin> {
   }
 
   void _keluar() {
-    // Navigate to Tampilan Awal (main screen)
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const TampilanAwal()),
-      (route) => false, // Remove all previous routes
+      (route) => false,
     );
   }
 
@@ -274,42 +266,46 @@ class _BerandaAdminState extends State<BerandaAdmin> {
                     },
                   ),
                 ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _keluar,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade100,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      "Keluar",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: IconButton(
-                    onPressed: _tambahHotel,
-                    icon: const Icon(Icons.add),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
           ],
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: _keluar,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    "Keluar",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: IconButton(
+                  onPressed: _tambahHotel,
+                  icon: const Icon(Icons.add, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
