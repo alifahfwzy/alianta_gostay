@@ -40,49 +40,9 @@ class _ExplorePageState extends State<ExplorePage> {
       backgroundColor: Colors.grey[50],
       body: Column(
         children: [
-          // Welcome Header
-          Container(
-            margin: const EdgeInsets.all(16.0),
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF29B6F6), Color(0xFF0288D1)],
-              ),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Temukan Hotel Terbaik',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Rekomendasi hotel pilihan untuk pengalaman menginap yang sempurna',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           // Search Bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
@@ -112,19 +72,6 @@ class _ExplorePageState extends State<ExplorePage> {
                   ),
                   const Icon(Icons.tune, color: Color(0xFF29B6F6)),
                 ],
-              ),
-            ),
-          ),
-
-          // Section Title
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 20, 16, 12),
-            child: Text(
-              'Hotel Rekomendasi',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
               ),
             ),
           ),
