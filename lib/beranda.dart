@@ -12,24 +12,12 @@ class BerandaPage extends StatefulWidget {
 class _BerandaPageState extends State<BerandaPage> {
   int _selectedIndex = 0;
   final List<Map<String, String>> hotelList = [
-    {
-      'name': 'Hotel Grand Luxury',
-      'location': 'Jakarta',
-      'price': 'Rp 1.200.000',
-    },
-    {'name': 'Resort Paradise', 'location': 'Bali', 'price': 'Rp 850.000'},
-    {
-      'name': 'Mountain View Hotel',
-      'location': 'Bandung',
-      'price': 'Rp 650.000',
-    },
-    {'name': 'Beach Resort', 'location': 'Yogyakarta', 'price': 'Rp 750.000'},
-    {
-      'name': 'City Center Hotel',
-      'location': 'Surabaya',
-      'price': 'Rp 900.000',
-    },
-    {'name': 'Boutique Hotel', 'location': 'Medan', 'price': 'Rp 550.000'},
+    {'name': 'Hotel Sahid Jaya Solo', 'location': 'Jl. Gajah Mada'},
+    {'name': 'The Sunan Hotel Solo', 'location': 'Jl. Adi Sucipto'},
+    {'name': 'Alila Solo', 'location': 'Jl. Slamet Riyadi'},
+    {'name': 'Novotel Solo', 'location': 'Jl. Slamet Riyadi'},
+    {'name': 'Lor In Hotel Solo', 'location': 'Jl. Adi Sucipto'},
+    {'name': 'Grand Orchid Solo', 'location': 'Jl. Slamet Riyadi'},
   ];
 
   @override
@@ -46,7 +34,7 @@ class _BerandaPageState extends State<BerandaPage> {
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFF29B6F6),
-        automaticallyImplyLeading: false, // Menghilangkan tombol back
+        automaticallyImplyLeading: false,
         elevation: 3,
         shadowColor: Colors.black26,
       ),
@@ -78,7 +66,7 @@ class _BerandaPageState extends State<BerandaPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Selamat Datang!',
+                      'Selamat Datang di Solo!',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
@@ -87,7 +75,7 @@ class _BerandaPageState extends State<BerandaPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Temukan hotel terbaik untuk pengalaman menginap yang tak terlupakan',
+                      'Temukan hotel terbaik di Kota Solo untuk pengalaman menginap yang tak terlupakan',
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.9),
                         fontSize: 14,
@@ -100,7 +88,7 @@ class _BerandaPageState extends State<BerandaPage> {
 
               // Section Title
               const Text(
-                'Hotel Populer',
+                'Hotel Terbaik di Solo',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -111,15 +99,15 @@ class _BerandaPageState extends State<BerandaPage> {
 
               // Hotel Grid - Fixed height
               SizedBox(
-                height: 400, // Fixed height untuk grid
+                height: 440,
                 child: GridView.builder(
                   physics: const BouncingScrollPhysics(),
                   itemCount: hotelList.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.9,
+                    crossAxisSpacing: 14,
+                    mainAxisSpacing: 14,
+                    childAspectRatio: 0.95,
                   ),
                   itemBuilder: (context, index) {
                     final hotel = hotelList[index];
@@ -140,7 +128,7 @@ class _BerandaPageState extends State<BerandaPage> {
                         children: [
                           // Hotel Image Placeholder
                           Expanded(
-                            flex: 3,
+                            flex: 4,
                             child: Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
@@ -183,52 +171,39 @@ class _BerandaPageState extends State<BerandaPage> {
                             child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        hotel['name']!,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                          color: Colors.black87,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 3),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.location_on,
-                                            size: 11,
-                                            color: Colors.grey,
-                                          ),
-                                          const SizedBox(width: 2),
-                                          Expanded(
-                                            child: Text(
-                                              hotel['location']!,
-                                              style: const TextStyle(
-                                                fontSize: 11,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
                                   Text(
-                                    hotel['price']!,
+                                    hotel['name']!,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 11,
-                                      color: Color(0xFF29B6F6),
+                                      fontSize: 12,
+                                      color: Colors.black87,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 3,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(
+                                        0xFF29B6F6,
+                                      ).withOpacity(0.15),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      hotel['location']!,
+                                      style: const TextStyle(
+                                        fontSize: 9,
+                                        color: Color(0xFF29B6F6),
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                 ],
