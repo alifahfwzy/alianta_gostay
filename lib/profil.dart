@@ -103,7 +103,7 @@ class _ProfilState extends State<Profil> {
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Cari'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
-      ),
+      ), 
     );
   }
 }
