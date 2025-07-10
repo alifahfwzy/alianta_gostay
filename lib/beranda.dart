@@ -7,6 +7,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: BerandaPage(), debugShowCheckedModeBanner: false);
@@ -15,6 +17,8 @@ class MyApp extends StatelessWidget {
 
 class BerandaPage extends StatelessWidget {
   final List<String> hotelList = List.generate(6, (index) => '#gambarhotel');
+
+  BerandaPage({super.key});
 
   @override
   Widget build(BuildContext context) {

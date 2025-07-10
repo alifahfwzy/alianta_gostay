@@ -11,7 +11,7 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   final TextEditingController _searchController = TextEditingController();
-  int _selectedIndex = 1; // Cari tab is selected
+  final int _selectedIndex = 1; // Cari tab is selected
 
   @override
   void dispose() {
