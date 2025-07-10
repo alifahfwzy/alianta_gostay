@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'beranda.dart';
 import 'explore_page.dart';
+import 'tampilan_awal.dart'; // ← sudah disesuaikan
 
 class Profil extends StatefulWidget {
   const Profil({super.key});
@@ -28,7 +29,6 @@ class _ProfilState extends State<Profil> {
     String? tanggal = prefs.getString('bergabung_sejak');
 
     if (tanggal == null) {
-      // Simpan tanggal pertama kali
       final now = DateTime.now();
       tanggal = "${now.day}-${now.month}-${now.year}";
       await prefs.setString('bergabung_sejak', tanggal);
@@ -127,7 +127,11 @@ class _ProfilState extends State<Profil> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: () {
-                  // aksi logout
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const TampilanAwal()),
+                    (route) => false,
+                  );
                 },
                 child: const Text(
                   'Keluar',
