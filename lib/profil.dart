@@ -37,13 +37,6 @@ class _ProfilState extends State<Profil> {
               'namauser@gmail.com',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
-            const SizedBox(height: 24),
-            ListTile(
-              leading: const Icon(Icons.phone),
-              title: const Text('Nomor Telepon'),
-              subtitle: const Text('+62 812-3456-7890'),
-              onTap: () {},
-            ),
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text('Alamat'),
