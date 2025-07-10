@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'config/supabase_config.dart';
+import 'config/setup_db.dart'; // Add this import
 import 'services/admin_service.dart';
 import 'landing_page.dart';
 
@@ -12,6 +13,9 @@ void main() async {
 
     // Test koneksi (optional, bisa dihapus di production)
     await SupabaseConfig.testConnection();
+
+    // Setup database tables if they don't exist
+    await SetupDatabase.setupAllTables();
 
     // Create default admin if not exists
     await AdminService.createDefaultAdmin();
