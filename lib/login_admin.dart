@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'beranda_admin.dart';
+import 'services/admin_service.dart';
 
 class LoginAdmin extends StatefulWidget {
   const LoginAdmin({super.key});
@@ -11,6 +12,7 @@ class LoginAdmin extends StatefulWidget {
 class _LoginAdminState extends State<LoginAdmin> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -19,33 +21,63 @@ class _LoginAdminState extends State<LoginAdmin> {
     super.dispose();
   }
 
-  void _loginAdmin() {
+  Future<void> _loginAdmin() async {
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
 
     if (username.isEmpty || password.isEmpty) {
-      _showSnackbar("Username dan Password wajib diisi.");
+      _showSnackbar("Username dan Password wajib diisi.", Colors.red);
       return;
     }
 
-    if (username == "admin" && password == "admin123") {
-      _showSnackbar("Login admin berhasil!");
-      // TODO: Navigasi ke halaman dashboard admin
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => BerandaAdmin()),
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final result = await AdminService.loginAdmin(
+        username: username,
+        password: password,
       );
-    } else {
-      _showSnackbar("Username atau Password salah.");
+
+      if (result['success']) {
+        _showSnackbar("Login admin berhasil!", Colors.green);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const BerandaAdmin()),
+        );
+      } else {
+        _showSnackbar(result['message'], Colors.red);
+      }
+    } catch (e) {
+      _showSnackbar("Terjadi kesalahan: $e", Colors.red);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
-  void _showSnackbar(String message) {
+  void _showSnackbar(String message, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.blue,
+        content: Row(
+          children: [
+            Icon(
+              backgroundColor == Colors.green ? Icons.check : Icons.error,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(message, style: const TextStyle(fontSize: 14)),
+            ),
+          ],
+        ),
+        backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        duration: const Duration(seconds: 3),
       ),
     );
   }
@@ -156,7 +188,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: _loginAdmin,
+                  onPressed: _isLoading ? null : _loginAdmin,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
@@ -165,10 +197,23 @@ class _LoginAdminState extends State<LoginAdmin> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Masuk sebagai Admin',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
+                  child:
+                      _isLoading
+                          ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                          : const Text(
+                            'Masuk sebagai Admin',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                 ),
               ),
 

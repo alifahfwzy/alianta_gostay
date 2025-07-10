@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'services/hotel_service.dart';
+import 'models/hotel.dart';
 
 class TambahHotel extends StatefulWidget {
   const TambahHotel({super.key});
@@ -21,6 +23,7 @@ class _TambahHotelState extends State<TambahHotel> {
   bool _parking = false;
   bool _restaurant = false;
   bool _gym = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -31,6 +34,61 @@ class _TambahHotelState extends State<TambahHotel> {
     _kontak2Controller.dispose();
     _linkGambarController.dispose();
     super.dispose();
+  }
+
+  Future<void> _simpanHotel() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        // Kumpulkan fasilitas yang dipilih
+        List<String> selectedFacilities = [];
+        if (_freeWifi) selectedFacilities.add('Free Wi-Fi');
+        if (_swimmingPool) selectedFacilities.add('Swimming Pool');
+        if (_parking) selectedFacilities.add('Parking');
+        if (_restaurant) selectedFacilities.add('Restaurant');
+        if (_gym) selectedFacilities.add('Gym');
+
+        // Buat objek hotel baru
+        Hotel newHotel = Hotel(
+          name: _namaHotelController.text,
+          location: _alamatController.text,
+          facilities: selectedFacilities,
+          imageUrl:
+              _linkGambarController.text.isEmpty
+                  ? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400'
+                  : _linkGambarController.text,
+          rating: 4.0, // Default rating
+        );
+
+        // Simpan ke database
+        await HotelService.addHotel(newHotel);
+
+        // Tampilkan pesan sukses
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Hotel "${newHotel.name}" berhasil ditambahkan'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // Kembali ke halaman sebelumnya
+        Navigator.of(context).pop();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal menambahkan hotel: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -157,16 +215,21 @@ class _TambahHotelState extends State<TambahHotel> {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              // Process data
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Data hotel ditambahkan')),
-              );
-              // Add your logic to save the data
-            }
-          },
-          child: const Text('Tambahkan', style: TextStyle(color: Colors.white)),
+          onPressed: _isLoading ? null : _simpanHotel,
+          child:
+              _isLoading
+                  ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                  : const Text(
+                    'Tambahkan',
+                    style: TextStyle(color: Colors.white),
+                  ),
         ),
       ),
     );

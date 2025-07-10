@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'beranda.dart';
 import 'profil.dart';
+import 'services/hotel_service.dart';
+import 'models/hotel.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -11,12 +13,92 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   final TextEditingController _searchController = TextEditingController();
-  final int _selectedIndex = 1; // Cari tab is selected
+  int _selectedIndex = 1; // Cari tab is selected
+  List<Hotel> _allHotels = [];
+  List<Hotel> _filteredHotels = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHotels();
+    _searchController.addListener(_onSearchChanged);
+  }
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadHotels() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final hotels = await HotelService.getAllHotels();
+      setState(() {
+        _allHotels = hotels;
+        _filteredHotels = List.from(hotels);
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      // Fallback to dummy data if connection fails
+      _initializeDummyHotels();
+    }
+  }
+
+  void _initializeDummyHotels() {
+    _allHotels = [
+      Hotel(
+        name: 'Hotel Sahid Jaya Solo',
+        location: 'Jl. Gajah Mada, Solo',
+        rating: 4.5,
+        facilities: ['Wi-Fi', 'AC', 'Restaurant'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
+      ),
+      Hotel(
+        name: 'The Sunan Hotel Solo',
+        location: 'Jl. Adi Sucipto, Solo',
+        rating: 4.7,
+        facilities: ['Wi-Fi', 'Pool', 'Spa'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300&fit=crop',
+      ),
+      Hotel(
+        name: 'Alila Solo',
+        location: 'Jl. Slamet Riyadi, Solo',
+        rating: 4.8,
+        facilities: ['Wi-Fi', 'Gym', 'Restaurant'],
+        imageUrl:
+            'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop',
+      ),
+    ];
+    setState(() {
+      _filteredHotels = List.from(_allHotels);
+    });
+  }
+
+  void _onSearchChanged() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        _filteredHotels = List.from(_allHotels);
+      } else {
+        _filteredHotels =
+            _allHotels.where((hotel) {
+              final hotelName = hotel.name.toLowerCase();
+              final hotelLocation = hotel.location.toLowerCase();
+              return hotelName.contains(query) || hotelLocation.contains(query);
+            }).toList();
+      }
+    });
   }
 
   @override
@@ -24,172 +106,321 @@ class _ExplorePageState extends State<ExplorePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Cari',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          'Hotel di Solo',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
+        backgroundColor: const Color(0xFF29B6F6),
+        automaticallyImplyLeading: false,
+        elevation: 3,
+        shadowColor: Colors.black26,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[50],
       body: Column(
         children: [
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: 'Cari Hotel...',
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
-                ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search, color: Color(0xFF29B6F6)),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        hintText: 'Cari hotel di Solo...',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  const Icon(Icons.tune, color: Color(0xFF29B6F6)),
+                ],
               ),
             ),
           ),
+
           // Hotel List
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: 6, // Number of hotels shown in the image
-              itemBuilder: (context, index) {
-                return _buildHotelCard();
-              },
-            ),
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _filteredHotels.isEmpty &&
+                        _searchController.text.isNotEmpty
+                    ? _buildNoResultsWidget()
+                    : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: _filteredHotels.length,
+                      itemBuilder: (context, index) {
+                        return _buildHotelCard(_filteredHotels[index]);
+                      },
+                    ),
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              // Navigate to Beranda page
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BerandaPage()),
-              );
-              break;
-            case 1:
-              // Already on Cari page, do nothing
-              break;
-            case 2:
-              // Navigate to Profile page
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Profil()),
-              );
-              break;
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            activeIcon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            activeIcon: Icon(Icons.search),
-            label: 'Cari',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            activeIcon: Icon(Icons.person),
-            label: 'Profil',
-          ),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 10,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          selectedItemColor: const Color(0xFF29B6F6),
+          unselectedItemColor: Colors.grey,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            switch (index) {
+              case 0:
+                // Navigate to Beranda page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const BerandaPage()),
+                );
+                break;
+              case 1:
+                // Already on Cari page, do nothing
+                break;
+              case 2:
+                // Navigate to Profile page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profil()),
+                );
+                break;
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Cari'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildHotelCard() {
+  Widget _buildHotelCard(Hotel hotel) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
+            color: Colors.grey.withOpacity(0.2),
+            blurRadius: 8,
             offset: const Offset(0, 2),
           ),
         ],
       ),
-      child: Row(
-        children: [
-          // Hotel Info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Rating
-                Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.orange, size: 16),
-                    const SizedBox(width: 4),
-                    const Text(
-                      '4.0',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  ],
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            // Hotel Image - Real Implementation
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey[300]!, width: 1),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(11),
+                child: Image.network(
+                  hotel.imageUrl,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color(0xFF29B6F6),
+                          ),
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.image, size: 30, color: Colors.grey),
+                            SizedBox(height: 2),
+                            Text(
+                              'Foto Hotel',
+                              style: TextStyle(
+                                fontSize: 8,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                const SizedBox(height: 4),
-                // Hotel Name
-                const Text(
-                  'The Grand Hotel',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 2),
-                // Price
-                const Text(
-                  'Rp 200.000',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.orange,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                // Location
-                const Text(
-                  'Lihat',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          // Hotel Image Placeholder
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Center(
-              child: Text(
-                '#gambarhotel',
-                style: TextStyle(color: Colors.grey, fontSize: 10),
-                textAlign: TextAlign.center,
               ),
             ),
+            const SizedBox(width: 16),
+
+            // Hotel Info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Hotel Name
+                  Text(
+                    hotel.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+
+                  // Location
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        size: 14,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          hotel.location,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+
+                  // Rating
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const SizedBox(width: 4),
+                      Text(
+                        hotel.rating.toString(),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Sangat Bagus',
+                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Action Button
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF29B6F6),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'Lihat',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoResultsWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
+          const SizedBox(height: 16),
+          Text(
+            'Hotel tidak ditemukan',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[600],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Coba kata kunci lain atau\nperiksa ejaan Anda',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              _searchController.clear();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF29B6F6),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: const Text('Lihat Semua Hotel'),
           ),
         ],
       ),
