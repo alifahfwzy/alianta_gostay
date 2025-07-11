@@ -14,9 +14,8 @@ class Profil extends StatefulWidget {
 class _ProfilState extends State<Profil> {
   String _namaPengguna = '';
   String _email = '';
-  bool _isEditing = false;
-  late TextEditingController _controllerNama;
   String _bergabungSejak = '';
+  late TextEditingController _controllerNama;
 
   @override
   void initState() {
@@ -77,21 +76,13 @@ class _ProfilState extends State<Profil> {
               ),
             ),
             const SizedBox(height: 16),
-            _isEditing
-                ? TextField(
-                    controller: _controllerNama,
-                    decoration: const InputDecoration(
-                      labelText: 'Nama Pengguna',
-                      border: OutlineInputBorder(),
-                    ),
-                  )
-                : Text(
-                    _namaPengguna,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+            Text(
+              _namaPengguna,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               _email,
@@ -103,22 +94,6 @@ class _ProfilState extends State<Profil> {
               style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
             const SizedBox(height: 16),
-            TextButton(
-              onPressed: () async {
-                setState(() {
-                  if (_isEditing) {
-                    _namaPengguna = _controllerNama.text;
-                  }
-                  _isEditing = !_isEditing;
-                });
-
-                if (!_isEditing) {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('username', _namaPengguna);
-                }
-              },
-              child: Text(_isEditing ? 'Simpan' : 'Edit Nama'),
-            ),
             const Divider(thickness: 1),
             const SizedBox(height: 10),
             Row(
