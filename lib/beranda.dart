@@ -18,7 +18,7 @@ class HotelDatabase {
     } catch (e) {
       print('❌ Error loading hotels: $e');
       // Fallback ke data dummy jika error
-      _hotels = _getDummyHotels();
+      // _hotels = _getDummyHotels();
     }
   }
 
@@ -93,80 +93,6 @@ class HotelDatabase {
       print('❌ Error searching hotels: $e');
       return [];
     }
-  }
-
-  // Data dummy sebagai fallback
-  static List<Hotel> _getDummyHotels() {
-    return [
-      Hotel(
-        name: 'Hotel Sahid Jaya Solo',
-        location: 'Jl. Gajah Mada',
-        description:
-            'Hotel bintang 4 dengan lokasi strategis di pusat kota Solo',
-        rating: 4.5,
-        facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
-        availableRooms: 10,
-        totalRooms: 100,
-      ),
-      Hotel(
-        name: 'The Sunan Hotel Solo',
-        location: 'Jl. Adi Sucipto',
-        description:
-            'Hotel bintang 4 dengan lokasi strategis di pusat kota Solo',
-        rating: 4.5,
-        facilities: ['Free Wi-Fi', 'Parking', 'Gym', 'Restaurant'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400',
-      ),
-      Hotel(
-        name: 'Alila Solo',
-        location: 'Jl. Slamet Riyadi',
-        description:
-            'Hotel bintang 4 dengan lokasi strategis di pusat kota Solo',
-        rating: 4.5,
-        facilities: ['Free Wi-Fi', 'Swimming Pool', 'Parking', 'Gym'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
-      ),
-      Hotel(
-        name: 'Novotel Solo',
-        location: 'Jl. Slamet Riyadi',
-        description:
-            'Hotel bintang 4 dengan lokasi strategis di pusat kota Solo',
-        rating: 4.5,
-        facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant', 'Parking'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400',
-      ),
-      Hotel(
-        name: 'Lor In Hotel Solo',
-        location: 'Jl. Adi Sucipto',
-        description:
-            'Hotel bintang 4 dengan lokasi strategis di pusat kota Solo',
-        rating: 4.5,
-        facilities: ['Free Wi-Fi', 'Parking', 'Restaurant'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400',
-      ),
-      Hotel(
-        name: 'Grand Orchid Solo',
-        location: 'Jl. Slamet Riyadi',
-        description:
-            'Hotel bintang 4 dengan lokasi strategis di pusat kota Solo',
-        rating: 4.5,
-        facilities: [
-          'Free Wi-Fi',
-          'Swimming Pool',
-          'Gym',
-          'Restaurant',
-          'Parking',
-        ],
-        imageUrl:
-            'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400',
-      ),
-    ];
   }
 }
 
