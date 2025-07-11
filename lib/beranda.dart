@@ -189,42 +189,6 @@ class _BerandaPageState extends State<BerandaPage> {
         _isLoading = false;
       });
     });
-    // Menampilkan popup snackbar welcome
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                'Selamat Datang di Solo!',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 6),
-              Text(
-                'Temukan hotel terbaik di Kota Solo untuk pengalaman menginap yang tak terlupakan',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: const Color(0xFF29B6F6),
-          duration: const Duration(seconds: 15),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          margin: const EdgeInsets.all(16),
-        ),
-      );
-    });
   }
 
   // Method untuk mendapatkan icon fasilitas
@@ -270,7 +234,42 @@ class _BerandaPageState extends State<BerandaPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Welcome Section dihapus, diganti dengan popup
+              // Welcome Section
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF29B6F6), Color(0xFF0288D1)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Selamat Datang di Solo!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Temukan hotel terbaik di Kota Solo untuk pengalaman menginap yang tak terlupakan',
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 20),
 
               // Section Title
@@ -484,7 +483,7 @@ class _BerandaPageState extends State<BerandaPage> {
                       );
                     },
                   ),
-              const SizedBox(height: 20), // Extra space sebelum bottom nav
+              const SizedBox(height: 20),
             ],
           ),
         ),
