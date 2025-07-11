@@ -58,6 +58,8 @@ class _ExplorePageState extends State<ExplorePage> {
       Hotel(
         name: 'Hotel Sahid Jaya Solo',
         location: 'Jl. Gajah Mada, Solo',
+        description:
+            'Hotel bintang 4 dengan lokasi strategis di pusat kota Solo',
         rating: 4.5,
         facilities: ['Wi-Fi', 'AC', 'Restaurant'],
         imageUrl:
@@ -66,6 +68,8 @@ class _ExplorePageState extends State<ExplorePage> {
       Hotel(
         name: 'The Sunan Hotel Solo',
         location: 'Jl. Adi Sucipto, Solo',
+        description:
+            'Hotel mewah dengan fasilitas lengkap untuk bisnis dan liburan',
         rating: 4.7,
         facilities: ['Wi-Fi', 'Pool', 'Spa'],
         imageUrl:
@@ -74,6 +78,7 @@ class _ExplorePageState extends State<ExplorePage> {
       Hotel(
         name: 'Alila Solo',
         location: 'Jl. Slamet Riyadi, Solo',
+        description: 'Hotel modern dengan pemandangan kota yang menakjubkan',
         rating: 4.8,
         facilities: ['Wi-Fi', 'Gym', 'Restaurant'],
         imageUrl:
@@ -253,7 +258,8 @@ class _ExplorePageState extends State<ExplorePage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(11),
                 child: Image.network(
-                  hotel.imageUrl,
+                  hotel.imageUrl ??
+                      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;

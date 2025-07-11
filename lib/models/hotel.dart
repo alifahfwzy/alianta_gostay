@@ -2,9 +2,12 @@ class Hotel {
   final String? id;
   final String name;
   final String location;
+  final String? description;
+  final double? rating;
+  final String? imageUrl;
   final List<String> facilities;
-  final String imageUrl;
-  final double rating;
+  final int? availableRooms;
+  final int? totalRooms;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -12,9 +15,12 @@ class Hotel {
     this.id,
     required this.name,
     required this.location,
-    required this.facilities,
-    required this.imageUrl,
-    this.rating = 0.0,
+    this.description,
+    this.rating,
+    this.imageUrl,
+    this.facilities = const [],
+    this.availableRooms,
+    this.totalRooms,
     this.createdAt,
     this.updatedAt,
   });
@@ -25,11 +31,15 @@ class Hotel {
       id: json['id'],
       name: json['name'] ?? '',
       location: json['location'] ?? '',
-      facilities: List<String>.from(json['facilities'] ?? []),
-      imageUrl:
-          json['image_url'] ??
-          'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
+      description: json['description'] ?? '',
       rating: (json['rating'] ?? 0.0).toDouble(),
+      imageUrl: json['image_url'],
+      facilities:
+          json['facilities'] != null
+              ? List<String>.from(json['facilities'])
+              : [],
+      availableRooms: json['available_rooms'] ?? 0,
+      totalRooms: json['total_rooms'] ?? 0,
       createdAt:
           json['created_at'] != null
               ? DateTime.parse(json['created_at'])
@@ -46,9 +56,12 @@ class Hotel {
     final Map<String, dynamic> data = {
       'name': name,
       'location': location,
-      'facilities': facilities,
-      'image_url': imageUrl,
+      'description': description,
       'rating': rating,
+      'image_url': imageUrl,
+      'facilities': facilities,
+      'available_rooms': availableRooms,
+      'total_rooms': totalRooms,
     };
 
     // Hanya tambahkan ID jika ada (untuk update)
@@ -59,14 +72,32 @@ class Hotel {
     return data;
   }
 
+  // Method khusus untuk insert (tanpa ID)
+  Map<String, dynamic> toJsonForInsert() {
+    return {
+      'name': name,
+      'location': location,
+      'description': description,
+      'rating': rating,
+      'image_url': imageUrl,
+      'facilities': facilities,
+      'available_rooms': availableRooms,
+      'total_rooms': totalRooms,
+    };
+  }
+
   // Copy with method untuk update
   Hotel copyWith({
     String? id,
     String? name,
     String? location,
-    List<String>? facilities,
-    String? imageUrl,
+    String? description,
+    int? pricePerNight,
     double? rating,
+    String? imageUrl,
+    List<String>? facilities,
+    int? availableRooms,
+    int? totalRooms,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -74,9 +105,12 @@ class Hotel {
       id: id ?? this.id,
       name: name ?? this.name,
       location: location ?? this.location,
-      facilities: facilities ?? this.facilities,
-      imageUrl: imageUrl ?? this.imageUrl,
+      description: description ?? this.description,
       rating: rating ?? this.rating,
+      imageUrl: imageUrl ?? this.imageUrl,
+      facilities: facilities ?? this.facilities,
+      availableRooms: availableRooms ?? this.availableRooms,
+      totalRooms: totalRooms ?? this.totalRooms,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -84,7 +118,7 @@ class Hotel {
 
   @override
   String toString() {
-    return 'Hotel{id: $id, name: $name, location: $location, facilities: $facilities, rating: $rating}';
+    return 'Hotel{id: $id, name: $name, location: $location, description: $description, rating: $rating, availableRooms: $availableRooms, totalRooms: $totalRooms}';
   }
 
   @override

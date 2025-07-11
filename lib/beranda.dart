@@ -101,9 +101,14 @@ class HotelDatabase {
       Hotel(
         name: 'Hotel Sahid Jaya Solo',
         location: 'Jl. Gajah Mada',
+        description:
+            'Hotel bintang 4 dengan lokasi strategis di pusat kota Solo',
+        rating: 4.5,
         facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant'],
         imageUrl:
             'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
+        availableRooms: 10,
+        totalRooms: 100,
       ),
       Hotel(
         name: 'The Sunan Hotel Solo',
@@ -301,7 +306,8 @@ class _BerandaPageState extends State<BerandaPage> {
                                   topRight: Radius.circular(16),
                                 ),
                                 child: Image.network(
-                                  hotel.imageUrl,
+                                  hotel.imageUrl ??
+                                      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
                                   fit: BoxFit.cover,
                                   loadingBuilder: (
                                     context,

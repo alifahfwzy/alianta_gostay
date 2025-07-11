@@ -54,19 +54,27 @@ class _BerandaAdminState extends State<BerandaAdmin> {
   void _tambahHotel() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const TambahHotel()),
-    ).then((_) {
-      _loadHotels();
+      MaterialPageRoute(builder: (context) => TambahHotel()),
+    ).then((result) {
+      if (result == true) {
+        _showSnackBar('Hotel berhasil ditambahkan', Colors.green);
+        _loadHotels();
+      }
     });
   }
 
   void _editHotel(int index) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Fitur edit hotel akan segera tersedia'),
-        backgroundColor: Colors.orange,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TambahHotel(hotel: _hotels[index]),
       ),
-    );
+    ).then((result) {
+      if (result == true) {
+        _showSnackBar('Hotel berhasil diperbarui', Colors.green);
+        _loadHotels();
+      }
+    });
   }
 
   Future<void> _hapusHotel(int index) async {

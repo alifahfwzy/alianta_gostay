@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'services/hotel_service.dart';
 import 'models/hotel.dart';
+import 'services/hotel_service.dart';
 
 class TambahHotel extends StatefulWidget {
-  const TambahHotel({super.key});
+  final Hotel? hotel;
+
+  const TambahHotel({Key? key, this.hotel}) : super(key: key);
 
   @override
   State<TambahHotel> createState() => _TambahHotelState();
@@ -51,6 +53,7 @@ class _TambahHotelState extends State<TambahHotel> {
         Hotel newHotel = Hotel(
           name: _namaHotelController.text,
           location: _alamatController.text,
+          description: _deskripsiController.text,
           facilities: selectedFacilities,
           imageUrl:
               _linkGambarController.text.isEmpty
