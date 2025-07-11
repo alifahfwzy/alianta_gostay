@@ -2,7 +2,7 @@ class Hotel {
   final String? id;
   final String name;
   final String location;
-  final String? description;
+  final String description;
   final double? rating;
   final String? imageUrl;
   final List<String> facilities;
@@ -15,7 +15,7 @@ class Hotel {
     this.id,
     required this.name,
     required this.location,
-    this.description,
+    required this.description,
     this.rating,
     this.imageUrl,
     this.facilities = const [],
@@ -31,7 +31,7 @@ class Hotel {
       id: json['id'],
       name: json['name'] ?? '',
       location: json['location'] ?? '',
-      description: json['description'] ?? '',
+      description: json['description'] as String? ?? 'Tidak ada deskripsi',
       rating: (json['rating'] ?? 0.0).toDouble(),
       imageUrl: json['image_url'],
       facilities:

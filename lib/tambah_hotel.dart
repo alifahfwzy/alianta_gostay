@@ -34,6 +34,7 @@ class _TambahHotelState extends State<TambahHotel> {
       _alamatController.text = widget.hotel!.location;
       _deskripsiController.text = widget.hotel!.description ?? '';
       _linkGambarController.text = widget.hotel!.imageUrl ?? '';
+      print('Debug - Description: ${widget.hotel!.description}'); // Debug line
 
       // Mengatur fasilitas yang ada
       _freeWifi = widget.hotel!.facilities.contains('Free Wi-Fi');
@@ -69,16 +70,20 @@ class _TambahHotelState extends State<TambahHotel> {
         if (_gym) selectedFacilities.add('Gym');
 
         // Buat objek hotel
+        print(
+          'Debug - Saving description: ${_deskripsiController.text}',
+        ); // Debug line
+
         Hotel hotel = Hotel(
           id: widget.hotel?.id,
-          name: _namaHotelController.text,
-          location: _alamatController.text,
-          description: _deskripsiController.text,
+          name: _namaHotelController.text.trim(),
+          location: _alamatController.text.trim(),
+          description: _deskripsiController.text.trim(),
           facilities: selectedFacilities,
           imageUrl:
-              _linkGambarController.text.isEmpty
+              _linkGambarController.text.trim().isEmpty
                   ? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400'
-                  : _linkGambarController.text,
+                  : _linkGambarController.text.trim(),
           rating: widget.hotel?.rating ?? 0.0,
           availableRooms: widget.hotel?.availableRooms ?? 0,
           totalRooms: widget.hotel?.totalRooms ?? 0,
@@ -182,6 +187,9 @@ class _TambahHotelState extends State<TambahHotel> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Deskripsi harus diisi';
+                    }
+                    if (value.length < 20) {
+                      return 'Deskripsi minimal 20 karakter';
                     }
                     return null;
                   },
