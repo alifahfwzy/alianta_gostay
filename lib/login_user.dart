@@ -482,7 +482,7 @@ class _LoginUserState extends State<LoginUser> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Anda belum memiliki akun. Silakan buat akun terlebih dahulu sebelum masuk ke aplikasi.',
+                      'Anda belum memiliki akun. Silakan buat akun terlebih dahulu sebelum masuk ke aplikasi!',
                       style: TextStyle(
                         color: Colors.blue.shade600,
                         fontSize: 12,
