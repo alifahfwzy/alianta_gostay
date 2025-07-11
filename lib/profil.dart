@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'beranda.dart';
 import 'explore_page.dart';
-import 'tampilan_awal.dart'; // ← sudah disesuaikan
+import 'tampilan_awal.dart';
 
 class Profil extends StatefulWidget {
   const Profil({super.key});
@@ -12,7 +12,8 @@ class Profil extends StatefulWidget {
 }
 
 class _ProfilState extends State<Profil> {
-  String _namaPengguna = 'Nama Pengguna';
+  String _namaPengguna = '';
+  String _email = '';
   bool _isEditing = false;
   late TextEditingController _controllerNama;
   String _bergabungSejak = '';
@@ -20,8 +21,18 @@ class _ProfilState extends State<Profil> {
   @override
   void initState() {
     super.initState();
-    _controllerNama = TextEditingController(text: _namaPengguna);
+    _controllerNama = TextEditingController();
+    _loadUserData();
     _loadBergabungSejak();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _namaPengguna = prefs.getString('username') ?? 'Nama Pengguna';
+      _email = prefs.getString('email') ?? 'namauser@gmail.com';
+      _controllerNama.text = _namaPengguna;
+    });
   }
 
   Future<void> _loadBergabungSejak() async {
@@ -74,9 +85,9 @@ class _ProfilState extends State<Profil> {
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
             const SizedBox(height: 8),
-            const Text(
-              'namauser@gmail.com',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+            Text(
+              _email,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 4),
             const Text(
@@ -85,13 +96,18 @@ class _ProfilState extends State<Profil> {
             ),
             const SizedBox(height: 16),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   if (_isEditing) {
                     _namaPengguna = _controllerNama.text;
                   }
                   _isEditing = !_isEditing;
                 });
+
+                if (!_isEditing) {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('username', _namaPengguna);
+                }
               },
               child: Text(_isEditing ? 'Simpan' : 'Edit Nama'),
             ),
@@ -126,7 +142,10 @@ class _ProfilState extends State<Profil> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.clear(); // hapus semua data saat logout
+
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const TampilanAwal()),
@@ -149,8 +168,8 @@ class _ProfilState extends State<Profil> {
         onTap: (index) {
           switch (index) {
             case 0:
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => BerandaPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BerandaPage()));
               break;
             case 1:
               Navigator.push(context,
