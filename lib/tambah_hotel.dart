@@ -197,9 +197,6 @@ class _TambahHotelState extends State<TambahHotel> {
                     if (value == null || value.isEmpty) {
                       return 'Deskripsi harus diisi';
                     }
-                    if (value.length < 20) {
-                      return 'Deskripsi minimal 20 karakter';
-                    }
                     return null;
                   },
                 ),
