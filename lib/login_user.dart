@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'beranda.dart';
 import 'buat_akun.dart';
 import 'login_admin.dart';
@@ -162,11 +163,16 @@ class _LoginUserState extends State<LoginUser> {
       if (result['success']) {
         // Login berhasil
         final userData = result['user'];
-        print('✅ Login berhasil: ${userData['username']}');
+        print('✅ Login berhasil: \\${userData['username']}');
+
+        // Simpan email dan username ke SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('email', userData['email'] ?? email);
+        await prefs.setString('username', userData['username'] ?? '');
 
         if (context.mounted) {
           _showSnackBar(
-            'Login berhasil! Selamat datang ${userData['username']}',
+            'Login berhasil! Selamat datang \\${userData['username']}',
             Colors.green,
           );
 
