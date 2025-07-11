@@ -66,8 +66,6 @@ class HotelService {
         'rating': hotel.rating,
         'image_url': hotel.imageUrl,
         'facilities': hotel.facilities,
-        'available_rooms': hotel.availableRooms,
-        'total_rooms': hotel.totalRooms,
       };
 
       print('Debug - Service - Update data: $data');

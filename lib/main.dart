@@ -55,6 +55,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'GoStay - Hotel Rekomendasi Solo',
       debugShowCheckedModeBanner: false, // Menghilangkan banner debug
+      showPerformanceOverlay: false, // Menghilangkan performance overlay
+      checkerboardRasterCacheImages: false, // Menghilangkan checkerboard
+      checkerboardOffscreenLayers: false, // Menghilangkan checkerboard layers
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: const Color(0xFF29B6F6),

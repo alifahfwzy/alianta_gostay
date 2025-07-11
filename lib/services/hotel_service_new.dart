@@ -27,12 +27,24 @@ class HotelService {
   static Future<Map<String, dynamic>> addHotel(Hotel hotel) async {
     try {
       print('🔄 Attempting to add hotel to database...');
-      Map<String, dynamic> data =
-          hotel.toJson(); // Menggunakan toJson dari model
 
-      // Tambahkan timestamps
-      data['created_at'] = DateTime.now().toIso8601String();
-      data['updated_at'] = DateTime.now().toIso8601String();
+      // Gunakan data yang sesuai dengan struktur database yang ada
+      Map<String, dynamic> data = {
+        'name': hotel.name,
+        'location': hotel.location,
+        'facilities': hotel.facilities,
+        'image_url':
+            hotel.imageUrl ??
+            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
+        'rating': hotel.rating ?? 0.0,
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+      };
+
+      // Tambahkan kolom tambahan jika ada di database
+      if (hotel.description.isNotEmpty) {
+        data['description'] = hotel.description;
+      }
 
       print('📝 Data to be inserted: $data');
 
@@ -70,16 +82,19 @@ class HotelService {
     Hotel hotel,
   ) async {
     try {
+      // Gunakan data yang sesuai dengan struktur database
       Map<String, dynamic> data = {
         'name': hotel.name,
         'location': hotel.location,
-        'description': hotel.description,
-        'rating': hotel.rating,
+        'rating': hotel.rating ?? 0.0,
         'image_url': hotel.imageUrl,
         'facilities': hotel.facilities,
-        'available_rooms': hotel.availableRooms,
-        'total_rooms': hotel.totalRooms,
       };
+
+      // Tambahkan kolom tambahan jika ada di database
+      if (hotel.description.isNotEmpty) {
+        data['description'] = hotel.description;
+      }
 
       print('Debug - Updating hotel with data: $data');
 

@@ -6,8 +6,6 @@ class Hotel {
   final double? rating;
   final String? imageUrl;
   final List<String> facilities;
-  final int? availableRooms;
-  final int? totalRooms;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -19,8 +17,6 @@ class Hotel {
     this.rating,
     this.imageUrl,
     this.facilities = const [],
-    this.availableRooms,
-    this.totalRooms,
     this.createdAt,
     this.updatedAt,
   });
@@ -31,15 +27,17 @@ class Hotel {
       id: json['id'],
       name: json['name'] ?? '',
       location: json['location'] ?? '',
-      description: json['description'] as String? ?? 'Tidak ada deskripsi',
+      description:
+          json['description'] as String? ??
+          'Hotel yang nyaman dengan fasilitas lengkap',
       rating: (json['rating'] ?? 0.0).toDouble(),
-      imageUrl: json['image_url'],
+      imageUrl:
+          json['image_url'] ??
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
       facilities:
           json['facilities'] != null
               ? List<String>.from(json['facilities'])
               : [],
-      availableRooms: json['available_rooms'] ?? 0,
-      totalRooms: json['total_rooms'] ?? 0,
       createdAt:
           json['created_at'] != null
               ? DateTime.parse(json['created_at'])
@@ -63,8 +61,6 @@ class Hotel {
           imageUrl ??
           'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
       'facilities': facilities,
-      'available_rooms': availableRooms ?? 0,
-      'total_rooms': totalRooms ?? 0,
     };
   }
 
@@ -77,8 +73,6 @@ class Hotel {
       'rating': rating,
       'image_url': imageUrl,
       'facilities': facilities,
-      'available_rooms': availableRooms,
-      'total_rooms': totalRooms,
     };
   }
 
@@ -88,12 +82,9 @@ class Hotel {
     String? name,
     String? location,
     String? description,
-    int? pricePerNight,
     double? rating,
     String? imageUrl,
     List<String>? facilities,
-    int? availableRooms,
-    int? totalRooms,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -105,8 +96,6 @@ class Hotel {
       rating: rating ?? this.rating,
       imageUrl: imageUrl ?? this.imageUrl,
       facilities: facilities ?? this.facilities,
-      availableRooms: availableRooms ?? this.availableRooms,
-      totalRooms: totalRooms ?? this.totalRooms,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -114,7 +103,7 @@ class Hotel {
 
   @override
   String toString() {
-    return 'Hotel{id: $id, name: $name, location: $location, description: $description, rating: $rating, availableRooms: $availableRooms, totalRooms: $totalRooms}';
+    return 'Hotel{id: $id, name: $name, location: $location, description: $description, rating: $rating, facilities: $facilities}';
   }
 
   @override

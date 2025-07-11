@@ -29,8 +29,6 @@ class HotelDatabase {
         facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant'],
         imageUrl:
             'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
-        availableRooms: 10,
-        totalRooms: 100,
       ),
       Hotel(
         name: 'The Sunan Hotel Solo',
@@ -41,8 +39,6 @@ class HotelDatabase {
         facilities: ['Free Wi-Fi', 'Parking', 'Gym', 'Restaurant'],
         imageUrl:
             'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400',
-        availableRooms: 15,
-        totalRooms: 150,
       ),
       Hotel(
         name: 'Alila Solo',
@@ -52,8 +48,6 @@ class HotelDatabase {
         facilities: ['Free Wi-Fi', 'Swimming Pool', 'Parking', 'Gym'],
         imageUrl:
             'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
-        availableRooms: 20,
-        totalRooms: 200,
       ),
       Hotel(
         name: 'Novotel Solo',
@@ -63,8 +57,6 @@ class HotelDatabase {
         facilities: ['Free Wi-Fi', 'Swimming Pool', 'Restaurant', 'Parking'],
         imageUrl:
             'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400',
-        availableRooms: 25,
-        totalRooms: 180,
       ),
       Hotel(
         name: 'Lor In Hotel Solo',
@@ -74,8 +66,6 @@ class HotelDatabase {
         facilities: ['Free Wi-Fi', 'Parking', 'Restaurant'],
         imageUrl:
             'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400',
-        availableRooms: 12,
-        totalRooms: 120,
       ),
       Hotel(
         name: 'Grand Orchid Solo',
@@ -92,8 +82,6 @@ class HotelDatabase {
         ],
         imageUrl:
             'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400',
-        availableRooms: 18,
-        totalRooms: 160,
       ),
     ];
   }

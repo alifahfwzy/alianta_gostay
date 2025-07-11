@@ -86,9 +86,7 @@ class _TambahHotelState extends State<TambahHotel> {
               _linkGambarController.text.trim().isEmpty
                   ? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400'
                   : _linkGambarController.text.trim(),
-          rating: widget.hotel?.rating ?? 0.0,
-          availableRooms: widget.hotel?.availableRooms ?? 0,
-          totalRooms: widget.hotel?.totalRooms ?? 0,
+          rating: widget.hotel?.rating ?? 4.0,
         );
 
         // Simpan atau update hotel
