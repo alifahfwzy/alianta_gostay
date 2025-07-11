@@ -110,8 +110,7 @@ class _BuatAkunState extends State<BuatAkun> {
       String errorMessage;
       if (e.toString().contains('timeout') ||
           e.toString().contains('connection')) {
-        errorMessage =
-            'Gagal terhubung ke server. Periksa koneksi internet Anda.';
+        errorMessage = 'Gagal terhubung. Periksa koneksi internet Anda.';
       } else if (e.toString().contains('not found')) {
         errorMessage =
             'Layanan belum tersedia. Silakan coba beberapa saat lagi.';
