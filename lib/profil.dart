@@ -58,7 +58,7 @@ class _ProfilState extends State<Profil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-appBar: appBar: AppBar(
+  appBar: AppBar(
   title: const Text(
     'Profil Saya',
     style: TextStyle(
