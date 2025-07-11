@@ -58,21 +58,22 @@ class _ProfilState extends State<Profil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-appBar: AppBar(
-        title: const Text(
-          'Profil Saya',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF29B6F6),
-        automaticallyImplyLeading: false,
-        elevation: 3,
-        shadowColor: Colors.black26,
-      ),
+  appBar: AppBar(
+  title: const Text(
+    'Profil Saya',
+    style: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+  ),
+  centerTitle: true,
+  backgroundColor: const Color(0xFF29B6F6),
+  automaticallyImplyLeading: true, // ← ubah ini dari false ke true
+  elevation: 3,
+  shadowColor: Colors.black26,
+),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
