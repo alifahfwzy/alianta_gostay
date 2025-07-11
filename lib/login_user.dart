@@ -261,7 +261,7 @@ class _LoginUserState extends State<LoginUser> {
                 child: Column(
                   children: [
                     Text(
-                      'Selamat Datang',
+                      'Selamat Datang!',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
