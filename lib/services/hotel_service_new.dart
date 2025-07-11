@@ -27,26 +27,28 @@ class HotelService {
   static Future<Map<String, dynamic>> addHotel(Hotel hotel) async {
     try {
       print('🔄 Attempting to add hotel to database...');
-      Map<String, dynamic> data = {
-        'name': hotel.name,
-        'location': hotel.location,
-        'description': hotel.description,
-        'rating': hotel.rating ?? 0.0,
-        'image_url': hotel.imageUrl,
-        'facilities': hotel.facilities,
-        'available_rooms': hotel.availableRooms ?? 0,
-        'total_rooms': hotel.totalRooms ?? 0,
-        'created_at': DateTime.now().toIso8601String(),
-        'updated_at': DateTime.now().toIso8601String(),
-      };
+      Map<String, dynamic> data =
+          hotel.toJson(); // Menggunakan toJson dari model
+
+      // Tambahkan timestamps
+      data['created_at'] = DateTime.now().toIso8601String();
+      data['updated_at'] = DateTime.now().toIso8601String();
 
       print('📝 Data to be inserted: $data');
 
-      final response =
-          await _client.from('hotels').insert(data).select().single();
+      try {
+        final response =
+            await _client.from('hotels').insert(data).select().single();
 
-      print('✅ Hotel successfully added with response: $response');
-      return {'success': true, 'message': 'Hotel berhasil ditambahkan'};
+        print('✅ Hotel successfully added with response: $response');
+        return {'success': true, 'message': 'Hotel berhasil ditambahkan'};
+      } catch (e) {
+        print('❌ Error during database operation: $e');
+        return {
+          'success': false,
+          'message': 'Gagal menambahkan hotel: ${e.toString()}',
+        };
+      }
     } catch (e) {
       print('❌ Error adding hotel: $e');
 

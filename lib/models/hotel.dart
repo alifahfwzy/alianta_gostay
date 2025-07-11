@@ -53,23 +53,19 @@ class Hotel {
 
   // Convert to JSON (untuk insert/update ke Supabase)
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {
+    return {
+      if (id != null) 'id': id,
       'name': name,
       'location': location,
       'description': description,
       'rating': rating ?? 0.0,
-      'image_url': imageUrl,
+      'image_url':
+          imageUrl ??
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
       'facilities': facilities,
       'available_rooms': availableRooms ?? 0,
       'total_rooms': totalRooms ?? 0,
     };
-
-    // Hanya tambahkan ID jika ada (untuk update)
-    if (id != null) {
-      data['id'] = id;
-    }
-
-    return data;
   }
 
   // Method khusus untuk insert (tanpa ID)
