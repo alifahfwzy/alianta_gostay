@@ -140,7 +140,7 @@ class _BerandaPageState extends State<BerandaPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'GoStay - Beranda',
+          'Beranda',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
