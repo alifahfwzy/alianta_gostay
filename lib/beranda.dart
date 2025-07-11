@@ -385,24 +385,25 @@ class _BerandaPageState extends State<BerandaPage> {
                               ),
 
                               // Action Button
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF29B6F6),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Text(
-                                  'Lihat',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
+                              // tombol lihat
+                              // Container(
+                              //   padding: const EdgeInsets.symmetric(
+                              //     horizontal: 12,
+                              //     vertical: 8,
+                              //   ),
+                              //   decoration: BoxDecoration(
+                              //     color: const Color(0xFF29B6F6),
+                              //     borderRadius: BorderRadius.circular(20),
+                              //   ),
+                              //   child: const Text(
+                              //     'Lihat',
+                              //     style: TextStyle(
+                              //       color: Colors.white,
+                              //       fontSize: 12,
+                              //       fontWeight: FontWeight.w600,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
