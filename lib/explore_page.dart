@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'beranda.dart';
 import 'profil.dart';
-import 'tampilan_detail_hotel.dart'; // import halaman detail
 import 'services/hotel_service.dart';
 import 'models/hotel.dart';
 
@@ -14,7 +13,7 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   final TextEditingController _searchController = TextEditingController();
-  final int _selectedIndex = 1; // Halaman Cari
+  final int _selectedIndex = 1; // Cari tab is selected
   List<Hotel> _allHotels = [];
   List<Hotel> _filteredHotels = [];
   bool _isLoading = true;
@@ -45,7 +44,7 @@ class _ExplorePageState extends State<ExplorePage> {
         _filteredHotels = List.from(hotels);
         _isLoading = false;
       });
-    } catch (_) {
+    } catch (e) {
       setState(() {
         _isLoading = false;
       });
@@ -58,11 +57,12 @@ class _ExplorePageState extends State<ExplorePage> {
       if (query.isEmpty) {
         _filteredHotels = List.from(_allHotels);
       } else {
-        _filteredHotels = _allHotels.where((hotel) {
-          final hotelName = hotel.name.toLowerCase();
-          final hotelLocation = hotel.location.toLowerCase();
-          return hotelName.contains(query) || hotelLocation.contains(query);
-        }).toList();
+        _filteredHotels =
+            _allHotels.where((hotel) {
+              final hotelName = hotel.name.toLowerCase();
+              final hotelLocation = hotel.location.toLowerCase();
+              return hotelName.contains(query) || hotelLocation.contains(query);
+            }).toList();
       }
     });
   }
@@ -72,7 +72,7 @@ class _ExplorePageState extends State<ExplorePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Cari',
+          'Hotel di Solo',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -88,6 +88,7 @@ class _ExplorePageState extends State<ExplorePage> {
       backgroundColor: Colors.grey[50],
       body: Column(
         children: [
+          // Search Bar
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -117,22 +118,27 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                     ),
                   ),
+                  //const Icon(Icons.tune, color: Color(0xFF29B6F6)),
                 ],
               ),
             ),
           ),
+
+          // Hotel List
           Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _filteredHotels.isEmpty && _searchController.text.isNotEmpty
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _filteredHotels.isEmpty &&
+                        _searchController.text.isNotEmpty
                     ? _buildNoResultsWidget()
                     : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: _filteredHotels.length,
-                        itemBuilder: (context, index) {
-                          return _buildHotelCard(_filteredHotels[index]);
-                        },
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: _filteredHotels.length,
+                      itemBuilder: (context, index) {
+                        return _buildHotelCard(_filteredHotels[index]);
+                      },
+                    ),
           ),
         ],
       ),
@@ -154,16 +160,20 @@ class _ExplorePageState extends State<ExplorePage> {
           elevation: 0,
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
-            if (index == _selectedIndex) return;
             switch (index) {
               case 0:
-                Navigator.pushReplacement(
+                // Navigate to Beranda page
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const BerandaPage()),
                 );
                 break;
+              case 1:
+                // Already on Cari page, do nothing
+                break;
               case 2:
-                Navigator.pushReplacement(
+                // Navigate to Profile page
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Profil()),
                 );
@@ -198,76 +208,72 @@ class _ExplorePageState extends State<ExplorePage> {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => TampilanDetailHotel(hotel: hotel),
-                  ),
-                );
-              },
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[300]!, width: 1),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(11),
-                  child: Image.network(
-                    hotel.imageUrl ?? '',
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(11),
-                        ),
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF29B6F6)),
-                            strokeWidth: 2,
+            // Hotel Image - Real Implementation
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey[300]!, width: 1),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(11),
+                child: Image.network(
+                  hotel.imageUrl ?? '',
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color(0xFF29B6F6),
                           ),
+                          strokeWidth: 2,
                         ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(11),
-                        ),
-                        child: const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.image, size: 30, color: Colors.grey),
-                              SizedBox(height: 2),
-                              Text(
-                                'Foto Hotel',
-                                style: TextStyle(
-                                  fontSize: 8,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.image, size: 30, color: Colors.grey),
+                            SizedBox(height: 2),
+                            Text(
+                              'Foto Hotel',
+                              style: TextStyle(
+                                fontSize: 8,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
             const SizedBox(width: 16),
+
+            // Hotel Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Hotel Name
                   Text(
                     hotel.name,
                     style: const TextStyle(
@@ -277,9 +283,15 @@ class _ExplorePageState extends State<ExplorePage> {
                     ),
                   ),
                   const SizedBox(height: 6),
+
+                  // Location
                   Row(
                     children: [
-                      const Icon(Icons.location_on, size: 14, color: Colors.grey),
+                      const Icon(
+                        Icons.location_on,
+                        size: 14,
+                        color: Colors.grey,
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
@@ -293,6 +305,8 @@ class _ExplorePageState extends State<ExplorePage> {
                     ],
                   ),
                   const SizedBox(height: 6),
+
+                  // Rating
                   Row(
                     children: [
                       const Icon(Icons.star, color: Colors.amber, size: 16),
@@ -315,28 +329,20 @@ class _ExplorePageState extends State<ExplorePage> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => TampilanDetailHotel(hotel: hotel),
-                  ),
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF29B6F6),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  'Lihat',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
+
+            // Action Button
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF29B6F6),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'Lihat',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
