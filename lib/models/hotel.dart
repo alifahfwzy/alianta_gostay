@@ -57,11 +57,11 @@ class Hotel {
       'name': name,
       'location': location,
       'description': description,
-      'rating': rating,
+      'rating': rating ?? 0.0,
       'image_url': imageUrl,
       'facilities': facilities,
-      'available_rooms': availableRooms,
-      'total_rooms': totalRooms,
+      'available_rooms': availableRooms ?? 0,
+      'total_rooms': totalRooms ?? 0,
     };
 
     // Hanya tambahkan ID jika ada (untuk update)

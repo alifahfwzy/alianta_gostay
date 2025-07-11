@@ -95,9 +95,18 @@ class _BerandaAdminState extends State<BerandaAdmin> {
               onPressed: () async {
                 Navigator.of(context).pop();
                 try {
-                  await HotelService.deleteHotel(_hotels[index].id!);
-                  _showSnackBar('Hotel berhasil dihapus', Colors.green);
-                  _loadHotels();
+                  final result = await HotelService.deleteHotel(
+                    _hotels[index].id!,
+                  );
+                  if (result['success'] == true) {
+                    _showSnackBar('Hotel berhasil dihapus', Colors.green);
+                    _loadHotels();
+                  } else {
+                    _showSnackBar(
+                      result['message'] ?? 'Gagal menghapus hotel',
+                      Colors.red,
+                    );
+                  }
                 } catch (e) {
                   _showSnackBar('Gagal menghapus hotel: $e', Colors.red);
                 }
@@ -220,6 +229,14 @@ class _BerandaAdminState extends State<BerandaAdmin> {
                                         style: const TextStyle(
                                           fontSize: 11,
                                           color: Colors.blue,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Deskripsi: ${hotel.description}',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black87,
                                         ),
                                       ),
                                     ],

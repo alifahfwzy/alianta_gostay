@@ -57,7 +57,14 @@ class HotelService {
     Hotel hotel,
   ) async {
     try {
-      await _client.from('hotels').update(hotel.toJson()).eq('id', id);
+      print('Debug - Service - Updating hotel ID: $id');
+      print('Debug - Service - Update data: ${hotel.toJson()}');
+
+      final data = hotel.toJson();
+      // Hapus id dari data update jika ada
+      data.remove('id');
+
+      await _client.from('hotels').update(data).eq('id', id);
       return {'success': true, 'message': 'Hotel berhasil diupdate'};
     } catch (e) {
       print('❌ Error updating hotel: $e');

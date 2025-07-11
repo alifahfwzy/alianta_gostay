@@ -92,8 +92,11 @@ class _TambahHotelState extends State<TambahHotel> {
         // Simpan atau update hotel
         Map<String, dynamic> result;
         if (widget.hotel == null) {
+          print('Debug - Adding new hotel: ${hotel.toJson()}');
           result = await HotelService.addHotel(hotel);
         } else {
+          print('Debug - Updating hotel with ID: ${widget.hotel!.id}');
+          print('Debug - Update data: ${hotel.toJson()}');
           result = await HotelService.updateHotel(widget.hotel!.id!, hotel);
         }
 
