@@ -1,6 +1,6 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'supabase_config.dart';
 import '../services/admin_service.dart';
+import '../services/user_service.dart';
 
 class SetupDatabase {
   static final _client = SupabaseConfig.client;
@@ -24,6 +24,31 @@ class SetupDatabase {
 
     // Test create admin default using AdminService
     await testAdminDefault();
+
+    // Test create user default for testing
+    await testUserDefault();
+  }
+
+  static Future<void> testUserDefault() async {
+    try {
+      print('🔄 Memeriksa keberadaan test user...');
+      final result = await UserService.createTestUser();
+
+      if (result['success']) {
+        print('✅ ${result['message']}');
+        if (result['credentials'] != null) {
+          final creds = result['credentials'];
+          print('🧪 Kredensial test user:');
+          print('   📧 Email: ${creds['email']}');
+          print('   🔒 Password: ${creds['password']}');
+          print('   👤 Username: ${creds['username']}');
+        }
+      } else {
+        print('❌ ${result['message']}');
+      }
+    } catch (e) {
+      print('❌ Error membuat test user: $e');
+    }
   }
 
   static Future<void> checkUsersTable() async {

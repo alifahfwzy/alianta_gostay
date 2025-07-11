@@ -103,6 +103,25 @@ Langkah singkat:
       print('🔑 Mencoba login: $email');
 
       try {
+        // Cek apakah user dengan email tersebut ada
+        final userCheck =
+            await _client
+                .from('users')
+                .select('id, email, username')
+                .eq('email', email)
+                .maybeSingle();
+
+        if (userCheck == null) {
+          print('❌ User tidak ditemukan: $email');
+          return {
+            'success': false,
+            'message':
+                'Email belum terdaftar. Silakan buat akun terlebih dahulu.',
+            'error_type': 'user_not_found',
+          };
+        }
+
+        // Jika user ada, cek password
         final response =
             await _client
                 .from('users')
@@ -122,8 +141,12 @@ Langkah singkat:
             'user': user.toJsonSafe(), // Return safe version without password
           };
         } else {
-          print('❌ Email/password salah: $email');
-          return {'success': false, 'message': 'Email atau password salah'};
+          print('❌ Password salah untuk: $email');
+          return {
+            'success': false,
+            'message': 'Password salah. Silakan periksa kembali password Anda.',
+            'error_type': 'wrong_password',
+          };
         }
       } catch (e) {
         print('❌ Error saat login: $e');
@@ -149,6 +172,7 @@ Langkah singkat:
             'success': false,
             'message':
                 'Database belum dikonfigurasi. Silakan hubungi administrator untuk setup tabel users.',
+            'error_type': 'database_not_configured',
           };
         }
 
@@ -156,6 +180,7 @@ Langkah singkat:
           'success': false,
           'message':
               'Gagal login: ${e.toString().split('Exception:').last.trim()}',
+          'error_type': 'system_error',
         };
       }
     } catch (e) {
@@ -163,6 +188,7 @@ Langkah singkat:
       return {
         'success': false,
         'message': 'Terjadi kesalahan sistem. Coba lagi nanti.',
+        'error_type': 'system_error',
       };
     }
   }
@@ -257,6 +283,64 @@ Langkah singkat:
         'success': false,
         'message': 'Gagal mengubah password: ${e.toString()}',
       };
+    }
+  }
+
+  // Create test user for development
+  static Future<Map<String, dynamic>> createTestUser() async {
+    try {
+      print('🧪 Membuat akun test user...');
+
+      // Cek apakah test user sudah ada
+      final existingUser = await getUserByEmail('test@gostay.com');
+      if (existingUser != null) {
+        print('ℹ️ Test user sudah ada');
+        return {
+          'success': true,
+          'message': 'Test user sudah ada',
+          'user': existingUser.toJsonSafe(),
+        };
+      }
+
+      // Buat test user baru
+      final result = await registerUser(
+        email: 'test@gostay.com',
+        password: 'test123',
+        username: 'Test User',
+      );
+
+      if (result['success']) {
+        print('✅ Test user berhasil dibuat');
+        return {
+          'success': true,
+          'message': 'Test user berhasil dibuat',
+          'credentials': {
+            'email': 'test@gostay.com',
+            'password': 'test123',
+            'username': 'Test User',
+          },
+        };
+      } else {
+        print('❌ Gagal membuat test user: ${result['message']}');
+        return result;
+      }
+    } catch (e) {
+      print('❌ Error membuat test user: $e');
+      return {
+        'success': false,
+        'message': 'Gagal membuat test user: ${e.toString()}',
+      };
+    }
+  }
+
+  // Check if user exists by email
+  static Future<bool> userExists(String email) async {
+    try {
+      final user = await getUserByEmail(email);
+      return user != null;
+    } catch (e) {
+      print('❌ Error checking user existence: $e');
+      return false;
     }
   }
 }
