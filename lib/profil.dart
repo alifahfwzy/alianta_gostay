@@ -69,24 +69,29 @@ class _ProfilState extends State<Profil> {
           children: [
             const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/images/profile.jpg'),
+              backgroundColor: Colors.blueAccent,
+              child: Icon(
+                Icons.person,
+                size: 50,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 16),
             _isEditing
                 ? TextField(
-                  controller: _controllerNama,
-                  decoration: const InputDecoration(
-                    labelText: 'Nama Pengguna',
-                    border: OutlineInputBorder(),
-                  ),
-                )
+                    controller: _controllerNama,
+                    decoration: const InputDecoration(
+                      labelText: 'Nama Pengguna',
+                      border: OutlineInputBorder(),
+                    ),
+                  )
                 : Text(
-                  _namaPengguna,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    _namaPengguna,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
             const SizedBox(height: 8),
             Text(
               _email,
