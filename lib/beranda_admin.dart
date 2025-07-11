@@ -222,6 +222,14 @@ class _BerandaAdminState extends State<BerandaAdmin> {
                                           color: Colors.blue,
                                         ),
                                       ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Deskripsi: ${hotel.description}',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
