@@ -111,7 +111,7 @@ class _ExplorePageState extends State<ExplorePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Hotel di Solo',
+          'Cari',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
