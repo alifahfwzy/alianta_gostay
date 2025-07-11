@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'beranda.dart';
 import 'profil.dart';
+import 'tampilan_detail_hotel.dart'; // import halaman detail
 import 'services/hotel_service.dart';
 import 'models/hotel.dart';
 
@@ -44,7 +45,7 @@ class _ExplorePageState extends State<ExplorePage> {
         _filteredHotels = List.from(hotels);
         _isLoading = false;
       });
-    } catch (e) {
+    } catch (_) {
       setState(() {
         _isLoading = false;
       });
@@ -120,12 +121,10 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
           ),
-
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : _filteredHotels.isEmpty &&
-                        _searchController.text.isNotEmpty
+                : _filteredHotels.isEmpty && _searchController.text.isNotEmpty
                     ? _buildNoResultsWidget()
                     : ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -137,8 +136,6 @@ class _ExplorePageState extends State<ExplorePage> {
           ),
         ],
       ),
-
-      // ⬇️ BottomNavigationBar dengan pushReplacement
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -222,9 +219,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                       child: const Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Color(0xFF29B6F6),
-                          ),
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF29B6F6)),
                           strokeWidth: 2,
                         ),
                       ),
@@ -310,18 +305,28 @@ class _ExplorePageState extends State<ExplorePage> {
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFF29B6F6),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'Lihat',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => TampilanDetailHotel(hotel: hotel),
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF29B6F6),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  'Lihat',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
