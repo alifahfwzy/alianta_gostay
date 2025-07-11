@@ -26,25 +26,39 @@ class HotelService {
   // Add new hotel
   static Future<Map<String, dynamic>> addHotel(Hotel hotel) async {
     try {
+      print('🔄 Attempting to add hotel to database...');
       Map<String, dynamic> data = {
         'name': hotel.name,
         'location': hotel.location,
         'description': hotel.description,
-        'rating': hotel.rating,
+        'rating': hotel.rating ?? 0.0,
         'image_url': hotel.imageUrl,
         'facilities': hotel.facilities,
-        'available_rooms': hotel.availableRooms,
-        'total_rooms': hotel.totalRooms,
+        'available_rooms': hotel.availableRooms ?? 0,
+        'total_rooms': hotel.totalRooms ?? 0,
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
       };
 
-      await _client.from('hotels').insert(data);
+      print('📝 Data to be inserted: $data');
+
+      final response =
+          await _client.from('hotels').insert(data).select().single();
+
+      print('✅ Hotel successfully added with response: $response');
       return {'success': true, 'message': 'Hotel berhasil ditambahkan'};
     } catch (e) {
       print('❌ Error adding hotel: $e');
-      return {
-        'success': false,
-        'message': 'Gagal menambahkan hotel: ${e.toString()}',
-      };
+
+      // More specific error handling
+      String errorMessage = 'Gagal menambahkan hotel';
+      if (e.toString().contains('duplicate key')) {
+        errorMessage = 'Hotel dengan nama ini sudah ada';
+      } else if (e.toString().contains('violates foreign key')) {
+        errorMessage = 'Data referensi tidak valid';
+      }
+
+      return {'success': false, 'message': errorMessage};
     }
   }
 
