@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'tambah_hotel.dart';
 import 'tampilan_awal.dart';
-import 'services/hotel_service.dart';
+import 'services/hotel_service_new.dart';
 import 'models/hotel.dart';
 
 class BerandaAdmin extends StatefulWidget {

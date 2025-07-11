@@ -58,11 +58,19 @@ class HotelService {
   ) async {
     try {
       print('Debug - Service - Updating hotel ID: $id');
-      print('Debug - Service - Update data: ${hotel.toJson()}');
 
-      final data = hotel.toJson();
-      // Hapus id dari data update jika ada
-      data.remove('id');
+      Map<String, dynamic> data = {
+        'name': hotel.name,
+        'location': hotel.location,
+        'description': hotel.description,
+        'rating': hotel.rating,
+        'image_url': hotel.imageUrl,
+        'facilities': hotel.facilities,
+        'available_rooms': hotel.availableRooms,
+        'total_rooms': hotel.totalRooms,
+      };
+
+      print('Debug - Service - Update data: $data');
 
       await _client.from('hotels').update(data).eq('id', id);
       return {'success': true, 'message': 'Hotel berhasil diupdate'};

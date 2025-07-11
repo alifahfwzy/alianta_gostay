@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'models/hotel.dart';
-import 'services/hotel_service.dart';
+import 'services/hotel_service_new.dart';
 
 class TambahHotel extends StatefulWidget {
   final Hotel? hotel;
