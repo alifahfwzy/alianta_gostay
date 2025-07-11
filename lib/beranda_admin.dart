@@ -54,24 +54,10 @@ class _BerandaAdminState extends State<BerandaAdmin> {
   void _tambahHotel() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TambahHotel()),
+      MaterialPageRoute(builder: (context) => const TambahHotel()),
     ).then((result) {
       if (result == true) {
         _showSnackBar('Hotel berhasil ditambahkan', Colors.green);
-        _loadHotels();
-      }
-    });
-  }
-
-  void _editHotel(int index) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TambahHotel(hotel: _hotels[index]),
-      ),
-    ).then((result) {
-      if (result == true) {
-        _showSnackBar('Hotel berhasil diperbarui', Colors.green);
         _loadHotels();
       }
     });
@@ -244,28 +230,12 @@ class _BerandaAdminState extends State<BerandaAdmin> {
                                 ),
                                 PopupMenuButton<String>(
                                   onSelected: (value) {
-                                    if (value == 'edit') {
-                                      _editHotel(index);
-                                    } else if (value == 'delete') {
+                                    if (value == 'delete') {
                                       _hapusHotel(index);
                                     }
                                   },
                                   itemBuilder:
                                       (BuildContext context) => [
-                                        const PopupMenuItem<String>(
-                                          value: 'edit',
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.edit,
-                                                size: 16,
-                                                color: Colors.blue,
-                                              ),
-                                              SizedBox(width: 8),
-                                              Text('Edit'),
-                                            ],
-                                          ),
-                                        ),
                                         const PopupMenuItem<String>(
                                           value: 'delete',
                                           child: Row(
