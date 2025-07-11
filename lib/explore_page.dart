@@ -13,7 +13,7 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   final TextEditingController _searchController = TextEditingController();
-  final int _selectedIndex = 1; // Cari tab is selected
+  final int _selectedIndex = 1; // Halaman Cari
   List<Hotel> _allHotels = [];
   List<Hotel> _filteredHotels = [];
   bool _isLoading = true;
@@ -57,12 +57,11 @@ class _ExplorePageState extends State<ExplorePage> {
       if (query.isEmpty) {
         _filteredHotels = List.from(_allHotels);
       } else {
-        _filteredHotels =
-            _allHotels.where((hotel) {
-              final hotelName = hotel.name.toLowerCase();
-              final hotelLocation = hotel.location.toLowerCase();
-              return hotelName.contains(query) || hotelLocation.contains(query);
-            }).toList();
+        _filteredHotels = _allHotels.where((hotel) {
+          final hotelName = hotel.name.toLowerCase();
+          final hotelLocation = hotel.location.toLowerCase();
+          return hotelName.contains(query) || hotelLocation.contains(query);
+        }).toList();
       }
     });
   }
@@ -72,7 +71,7 @@ class _ExplorePageState extends State<ExplorePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Hotel di Solo',
+          'Cari',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -88,7 +87,6 @@ class _ExplorePageState extends State<ExplorePage> {
       backgroundColor: Colors.grey[50],
       body: Column(
         children: [
-          // Search Bar
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -118,30 +116,29 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                     ),
                   ),
-                  //const Icon(Icons.tune, color: Color(0xFF29B6F6)),
                 ],
               ),
             ),
           ),
 
-          // Hotel List
           Expanded(
-            child:
-                _isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : _filteredHotels.isEmpty &&
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _filteredHotels.isEmpty &&
                         _searchController.text.isNotEmpty
                     ? _buildNoResultsWidget()
                     : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: _filteredHotels.length,
-                      itemBuilder: (context, index) {
-                        return _buildHotelCard(_filteredHotels[index]);
-                      },
-                    ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: _filteredHotels.length,
+                        itemBuilder: (context, index) {
+                          return _buildHotelCard(_filteredHotels[index]);
+                        },
+                      ),
           ),
         ],
       ),
+
+      // ⬇️ BottomNavigationBar dengan pushReplacement
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -160,20 +157,16 @@ class _ExplorePageState extends State<ExplorePage> {
           elevation: 0,
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
+            if (index == _selectedIndex) return;
             switch (index) {
               case 0:
-                // Navigate to Beranda page
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const BerandaPage()),
                 );
                 break;
-              case 1:
-                // Already on Cari page, do nothing
-                break;
               case 2:
-                // Navigate to Profile page
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const Profil()),
                 );
@@ -208,7 +201,6 @@ class _ExplorePageState extends State<ExplorePage> {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            // Hotel Image - Real Implementation
             Container(
               width: 80,
               height: 80,
@@ -219,7 +211,7 @@ class _ExplorePageState extends State<ExplorePage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(11),
                 child: Image.network(
-                  hotel.imageUrl ?? '', // Use empty string if null
+                  hotel.imageUrl ?? '',
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -267,13 +259,10 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
             const SizedBox(width: 16),
-
-            // Hotel Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Hotel Name
                   Text(
                     hotel.name,
                     style: const TextStyle(
@@ -283,15 +272,9 @@ class _ExplorePageState extends State<ExplorePage> {
                     ),
                   ),
                   const SizedBox(height: 6),
-
-                  // Location
                   Row(
                     children: [
-                      const Icon(
-                        Icons.location_on,
-                        size: 14,
-                        color: Colors.grey,
-                      ),
+                      const Icon(Icons.location_on, size: 14, color: Colors.grey),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
@@ -305,8 +288,6 @@ class _ExplorePageState extends State<ExplorePage> {
                     ],
                   ),
                   const SizedBox(height: 6),
-
-                  // Rating
                   Row(
                     children: [
                       const Icon(Icons.star, color: Colors.amber, size: 16),
@@ -329,8 +310,6 @@ class _ExplorePageState extends State<ExplorePage> {
                 ],
               ),
             ),
-
-            // Action Button
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(

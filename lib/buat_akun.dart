@@ -84,7 +84,7 @@ class _BuatAkunState extends State<BuatAkun> {
       print('💡 Mencoba mendaftarkan: $email, $username');
 
       // Tambahkan delay untuk memastikan koneksi stabil
-      print('⏳ Menunggu koneksi...');
+      print('⏳ Menunggu koneksi internet...');
       await Future.delayed(const Duration(seconds: 1));
 
       // Coba mendaftarkan user
@@ -176,7 +176,7 @@ class _BuatAkunState extends State<BuatAkun> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Tutup dialog
+                Navigator.of(context).pop();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginUser()),
