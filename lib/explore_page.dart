@@ -48,41 +48,7 @@ class _ExplorePageState extends State<ExplorePage> {
       setState(() {
         _isLoading = false;
       });
-      // Fallback to dummy data if connection fails
-      _initializeDummyHotels();
     }
-  }
-
-  void _initializeDummyHotels() {
-    _allHotels = [
-      Hotel(
-        name: 'Hotel Sahid Jaya Solo',
-        location: 'Jl. Gajah Mada, Solo',
-        rating: 4.5,
-        facilities: ['Wi-Fi', 'AC', 'Restaurant'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop',
-      ),
-      Hotel(
-        name: 'The Sunan Hotel Solo',
-        location: 'Jl. Adi Sucipto, Solo',
-        rating: 4.7,
-        facilities: ['Wi-Fi', 'Pool', 'Spa'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300&fit=crop',
-      ),
-      Hotel(
-        name: 'Alila Solo',
-        location: 'Jl. Slamet Riyadi, Solo',
-        rating: 4.8,
-        facilities: ['Wi-Fi', 'Gym', 'Restaurant'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop',
-      ),
-    ];
-    setState(() {
-      _filteredHotels = List.from(_allHotels);
-    });
   }
 
   void _onSearchChanged() {
@@ -253,7 +219,7 @@ class _ExplorePageState extends State<ExplorePage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(11),
                 child: Image.network(
-                  hotel.imageUrl,
+                  hotel.imageUrl ?? '', // Use empty string if null
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
