@@ -26,6 +26,25 @@ class _TambahHotelState extends State<TambahHotel> {
   bool _isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Mengisi form dengan data hotel yang ada jika dalam mode edit
+    if (widget.hotel != null) {
+      _namaHotelController.text = widget.hotel!.name;
+      _alamatController.text = widget.hotel!.location;
+      _deskripsiController.text = widget.hotel!.description ?? '';
+      _linkGambarController.text = widget.hotel!.imageUrl ?? '';
+
+      // Mengatur fasilitas yang ada
+      _freeWifi = widget.hotel!.facilities.contains('Free Wi-Fi');
+      _swimmingPool = widget.hotel!.facilities.contains('Swimming Pool');
+      _parking = widget.hotel!.facilities.contains('Parking');
+      _restaurant = widget.hotel!.facilities.contains('Restaurant');
+      _gym = widget.hotel!.facilities.contains('Gym');
+    }
+  }
+
+  @override
   void dispose() {
     _namaHotelController.dispose();
     _deskripsiController.dispose();
@@ -49,8 +68,9 @@ class _TambahHotelState extends State<TambahHotel> {
         if (_restaurant) selectedFacilities.add('Restaurant');
         if (_gym) selectedFacilities.add('Gym');
 
-        // Buat objek hotel baru
-        Hotel newHotel = Hotel(
+        // Buat objek hotel
+        Hotel hotel = Hotel(
+          id: widget.hotel?.id,
           name: _namaHotelController.text,
           location: _alamatController.text,
           description: _deskripsiController.text,
@@ -59,35 +79,26 @@ class _TambahHotelState extends State<TambahHotel> {
               _linkGambarController.text.isEmpty
                   ? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400'
                   : _linkGambarController.text,
-          rating: 4.0, // Default rating
+          rating: widget.hotel?.rating ?? 0.0,
+          availableRooms: widget.hotel?.availableRooms ?? 0,
+          totalRooms: widget.hotel?.totalRooms ?? 0,
         );
 
-        // Simpan ke database
-        final result = await HotelService.addHotel(newHotel);
+        // Simpan atau update hotel
+        Map<String, dynamic> result;
+        if (widget.hotel == null) {
+          result = await HotelService.addHotel(hotel);
+        } else {
+          result = await HotelService.updateHotel(widget.hotel!.id!, hotel);
+        }
 
         if (result['success'] == true) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Hotel "${newHotel.name}" berhasil ditambahkan'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          Navigator.of(context).pop();
+          Navigator.pop(context, true);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Gagal menambahkan hotel: ${result['message']}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          _showErrorMessage('Gagal menyimpan hotel');
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Gagal menambahkan hotel: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        _showErrorMessage('Error: $e');
       } finally {
         setState(() {
           _isLoading = false;
@@ -96,185 +107,192 @@ class _TambahHotelState extends State<TambahHotel> {
     }
   }
 
+  void _showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        title: Text(
+          widget.hotel == null ? 'Tambah Hotel' : 'Edit Hotel',
+          style: const TextStyle(color: Colors.black),
         ),
-        title: const Text('Tambah Hotel'),
-        centerTitle: true,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0.5,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildTextField(
-                controller: _namaHotelController,
-                labelText: 'Nama Hotel',
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _deskripsiController,
-                labelText: 'Deskripsi',
-                maxLines: 3,
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _alamatController,
-                labelText: 'Alamat',
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _linkGambarController,
-                labelText: 'Link Gambar',
-                keyboardType: TextInputType.url,
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Fasilitas',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              _buildCheckbox(
-                title: 'Free Wi-Fi',
-                value: _freeWifi,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _freeWifi = value ?? false;
-                  });
-                },
-              ),
-              _buildCheckbox(
-                title: 'Swimming Pool',
-                value: _swimmingPool,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _swimmingPool = value ?? false;
-                  });
-                },
-              ),
-              _buildCheckbox(
-                title: 'Parking',
-                value: _parking,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _parking = value ?? false;
-                  });
-                },
-              ),
-              _buildCheckbox(
-                title: 'Restaurant',
-                value: _restaurant,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _restaurant = value ?? false;
-                  });
-                },
-              ),
-              _buildCheckbox(
-                title: 'Gym',
-                value: _gym,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _gym = value ?? false;
-                  });
-                },
-              ),
-              const SizedBox(height: 32),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 24), // Naik 24px
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              textStyle: const TextStyle(fontSize: 18, color: Colors.white),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            onPressed: _isLoading ? null : _simpanHotel,
-            child:
-                _isLoading
-                    ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
-                    : const Text(
-                      'Tambahkan',
-                      style: TextStyle(color: Colors.white),
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Nama Hotel
+                TextFormField(
+                  controller: _namaHotelController,
+                  decoration: InputDecoration(
+                    labelText: 'Nama Hotel',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nama hotel harus diisi';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Alamat
+                TextFormField(
+                  controller: _alamatController,
+                  decoration: InputDecoration(
+                    labelText: 'Alamat',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Alamat harus diisi';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Deskripsi
+                TextFormField(
+                  controller: _deskripsiController,
+                  decoration: InputDecoration(
+                    labelText: 'Deskripsi',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  maxLines: 3,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Deskripsi harus diisi';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Link Gambar
+                TextFormField(
+                  controller: _linkGambarController,
+                  decoration: InputDecoration(
+                    labelText: 'Link Gambar',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    hintText: 'https://example.com/image.jpg',
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Fasilitas Section
+                const Text(
+                  'Fasilitas Hotel',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+
+                // Checkbox Fasilitas
+                CheckboxListTile(
+                  title: const Text('Free Wi-Fi'),
+                  value: _freeWifi,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _freeWifi = value ?? false;
+                    });
+                  },
+                ),
+                CheckboxListTile(
+                  title: const Text('Swimming Pool'),
+                  value: _swimmingPool,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _swimmingPool = value ?? false;
+                    });
+                  },
+                ),
+                CheckboxListTile(
+                  title: const Text('Parking'),
+                  value: _parking,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _parking = value ?? false;
+                    });
+                  },
+                ),
+                CheckboxListTile(
+                  title: const Text('Restaurant'),
+                  value: _restaurant,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _restaurant = value ?? false;
+                    });
+                  },
+                ),
+                CheckboxListTile(
+                  title: const Text('Gym'),
+                  value: _gym,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _gym = value ?? false;
+                    });
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                // Submit Button
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _simpanHotel,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child:
+                      _isLoading
+                          ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                          : Text(
+                            widget.hotel == null
+                                ? 'Tambah Hotel'
+                                : 'Simpan Perubahan',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String labelText,
-    int maxLines = 1,
-    TextInputType keyboardType = TextInputType.text,
-    bool isOptional = false,
-  }) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: labelText,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 10,
-        ),
-      ),
-      maxLines: maxLines,
-      keyboardType: keyboardType,
-      validator: (value) {
-        if (!isOptional && (value == null || value.isEmpty)) {
-          return '$labelText tidak boleh kosong';
-        }
-        if (keyboardType == TextInputType.url &&
-            value != null &&
-            value.isNotEmpty &&
-            !Uri.parse(value).isAbsolute) {
-          return 'Link gambar tidak valid';
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget _buildCheckbox({
-    required String title,
-    required bool value,
-    required ValueChanged<bool?> onChanged,
-  }) {
-    return CheckboxListTile(
-      title: Text(title),
-      value: value,
-      onChanged: onChanged,
-      controlAffinity: ListTileControlAffinity.leading,
-      contentPadding: EdgeInsets.zero,
-      activeColor: Colors.blue,
     );
   }
 }
