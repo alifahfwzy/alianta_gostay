@@ -74,16 +74,19 @@ class _ProfilState extends State<Profil> {
             const SizedBox(height: 16),
             _isEditing
                 ? TextField(
-                    controller: _controllerNama,
-                    decoration: const InputDecoration(
-                      labelText: 'Nama Pengguna',
-                      border: OutlineInputBorder(),
-                    ),
-                  )
-                : Text(
-                    _namaPengguna,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  controller: _controllerNama,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama Pengguna',
+                    border: OutlineInputBorder(),
                   ),
+                )
+                : Text(
+                  _namaPengguna,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
             const SizedBox(height: 8),
             Text(
               _email,
@@ -117,8 +120,13 @@ class _ProfilState extends State<Profil> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text('Bergabung sejak:', style: TextStyle(fontSize: 16)),
-                Text(_bergabungSejak,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                Text(
+                  _bergabungSejak,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 10),
@@ -126,9 +134,14 @@ class _ProfilState extends State<Profil> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text('Status Akun:', style: TextStyle(fontSize: 16)),
-                Text('Aktif',
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500, color: Colors.green)),
+                Text(
+                  'Aktif',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.green,
+                  ),
+                ),
               ],
             ),
             const Spacer(),
@@ -148,7 +161,9 @@ class _ProfilState extends State<Profil> {
 
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const TampilanAwal()),
+                    MaterialPageRoute(
+                      builder: (context) => const TampilanAwal(),
+                    ),
                     (route) => false,
                   );
                 },
@@ -168,12 +183,16 @@ class _ProfilState extends State<Profil> {
         onTap: (index) {
           switch (index) {
             case 0:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => BerandaPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BerandaPage()),
+              );
               break;
             case 1:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ExplorePage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ExplorePage()),
+              );
               break;
             case 2:
               break;
