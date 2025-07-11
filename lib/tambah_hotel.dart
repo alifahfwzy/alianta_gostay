@@ -32,8 +32,10 @@ class _TambahHotelState extends State<TambahHotel> {
     if (widget.hotel != null) {
       _namaHotelController.text = widget.hotel!.name;
       _alamatController.text = widget.hotel!.location;
-      _deskripsiController.text = widget.hotel!.description ?? '';
-      _linkGambarController.text = widget.hotel!.imageUrl ?? '';
+      _deskripsiController.text = widget.hotel!.description;
+      _linkGambarController.text =
+          widget.hotel!.imageUrl ??
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400';
       print('Debug - Description: ${widget.hotel!.description}'); // Debug line
 
       // Mengatur fasilitas yang ada
@@ -75,7 +77,7 @@ class _TambahHotelState extends State<TambahHotel> {
         ); // Debug line
 
         Hotel hotel = Hotel(
-          id: widget.hotel?.id,
+          id: widget.hotel?.id, // Only set ID if editing existing hotel
           name: _namaHotelController.text.trim(),
           location: _alamatController.text.trim(),
           description: _deskripsiController.text.trim(),
@@ -92,21 +94,25 @@ class _TambahHotelState extends State<TambahHotel> {
         // Simpan atau update hotel
         Map<String, dynamic> result;
         if (widget.hotel == null) {
-          print('Debug - Adding new hotel: ${hotel.toJson()}');
+          print('Debug - Adding new hotel');
+          print('Debug - Hotel data: ${hotel.toJson()}');
           result = await HotelService.addHotel(hotel);
+          print('Debug - Add result: $result');
         } else {
           print('Debug - Updating hotel with ID: ${widget.hotel!.id}');
           print('Debug - Update data: ${hotel.toJson()}');
           result = await HotelService.updateHotel(widget.hotel!.id!, hotel);
+          print('Debug - Update result: $result');
         }
 
         if (result['success'] == true) {
           Navigator.pop(context, true);
         } else {
-          _showErrorMessage('Gagal menyimpan hotel');
+          _showErrorMessage(result['message'] ?? 'Gagal menyimpan hotel');
         }
       } catch (e) {
-        _showErrorMessage('Error: $e');
+        print('Debug - Error saving hotel: $e');
+        _showErrorMessage('Error: ${e.toString()}');
       } finally {
         setState(() {
           _isLoading = false;
