@@ -47,24 +47,28 @@ class TampilanDetailHotel extends StatelessWidget {
               children: [
                 const Icon(Icons.star, color: Colors.amber, size: 20),
                 const SizedBox(width: 4),
-                Text(hotel.rating.toString(), style: const TextStyle(fontSize: 14)),
+                Text('${hotel.rating.toString()} Sangat Bagus',
+                    style: const TextStyle(fontSize: 14)),
               ],
             ),
             const SizedBox(height: 8),
 
             Text(
               hotel.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            const Divider(thickness: 1, height: 24),
 
+            // Deskripsi atau teks default
             const Text(
               'Experience luxury and comfort at this hotel...',
               style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
             const SizedBox(height: 16),
 
-            const Text('Fasilitas', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text('Fasilitas',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
 
             Wrap(
@@ -73,13 +77,26 @@ class TampilanDetailHotel extends StatelessWidget {
               children: hotel.facilities.map((fasilitas) {
                 IconData icon;
                 switch (fasilitas.toLowerCase()) {
-                  case 'wifi': icon = Icons.wifi; break;
-                  case 'ac': icon = Icons.ac_unit; break;
-                  case 'restaurant': icon = Icons.restaurant; break;
-                  case 'spa': icon = Icons.spa; break;
-                  case 'pool': icon = Icons.pool; break;
-                  case 'gym': icon = Icons.fitness_center; break;
-                  default: icon = Icons.check_circle_outline;
+                  case 'wifi':
+                    icon = Icons.wifi;
+                    break;
+                  case 'ac':
+                    icon = Icons.ac_unit;
+                    break;
+                  case 'restaurant':
+                    icon = Icons.restaurant;
+                    break;
+                  case 'spa':
+                    icon = Icons.spa;
+                    break;
+                  case 'pool':
+                    icon = Icons.pool;
+                    break;
+                  case 'gym':
+                    icon = Icons.fitness_center;
+                    break;
+                  default:
+                    icon = Icons.check_circle_outline;
                 }
                 return _facilityItem(icon, fasilitas);
               }).toList(),
@@ -94,7 +111,8 @@ class TampilanDetailHotel extends StatelessWidget {
                 Expanded(
                   child: Text(
                     hotel.location,
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                    style: const TextStyle(
+                        fontSize: 14, color: Colors.black54),
                   ),
                 )
               ],
