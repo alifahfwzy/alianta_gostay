@@ -26,17 +26,18 @@ class TampilanDetailHotel extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Gambar Hotel
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                hotel.imageUrl ?? '',
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  height: 200,
-                  color: Colors.grey[300],
-                  child: const Center(child: Text('#gambarhotel')),
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  hotel.imageUrl ?? '',
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: Colors.grey[300],
+                    child: const Center(child: Text('#gambarhotel')),
+                  ),
                 ),
               ),
             ),
@@ -47,28 +48,26 @@ class TampilanDetailHotel extends StatelessWidget {
               children: [
                 const Icon(Icons.star, color: Colors.amber, size: 20),
                 const SizedBox(width: 4),
-                Text('${hotel.rating.toString()} Sangat Bagus',
-                    style: const TextStyle(fontSize: 14)),
+                Text(hotel.rating.toString(), style: const TextStyle(fontSize: 14)),
+                const SizedBox(width: 6),
+                const Text('Sangat Bagus', style: TextStyle(fontSize: 14, color: Colors.black54))
               ],
             ),
             const SizedBox(height: 8),
 
             Text(
               hotel.name,
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const Divider(thickness: 1, height: 24),
+            const SizedBox(height: 8),
 
-            // Deskripsi atau teks default
             const Text(
               'Experience luxury and comfort at this hotel...',
               style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
             const SizedBox(height: 16),
 
-            const Text('Fasilitas',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text('Fasilitas', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
 
             Wrap(
@@ -78,6 +77,8 @@ class TampilanDetailHotel extends StatelessWidget {
                 IconData icon;
                 switch (fasilitas.toLowerCase()) {
                   case 'wifi':
+                  case 'free wifi':
+                  case 'free wi-fi':
                     icon = Icons.wifi;
                     break;
                   case 'ac':
@@ -90,10 +91,14 @@ class TampilanDetailHotel extends StatelessWidget {
                     icon = Icons.spa;
                     break;
                   case 'pool':
+                  case 'swimming pool':
                     icon = Icons.pool;
                     break;
                   case 'gym':
                     icon = Icons.fitness_center;
+                    break;
+                  case 'parking':
+                    icon = Icons.local_parking;
                     break;
                   default:
                     icon = Icons.check_circle_outline;
@@ -111,8 +116,7 @@ class TampilanDetailHotel extends StatelessWidget {
                 Expanded(
                   child: Text(
                     hotel.location,
-                    style: const TextStyle(
-                        fontSize: 14, color: Colors.black54),
+                    style: const TextStyle(fontSize: 14, color: Colors.black54),
                   ),
                 )
               ],
