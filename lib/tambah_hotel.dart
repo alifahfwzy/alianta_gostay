@@ -219,22 +219,52 @@ class _TambahHotelState extends State<TambahHotel> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          _previewImageUrl!,
-                          height: 180,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              height: 180,
-                              width: double.infinity,
-                              color: Colors.grey[300],
-                              alignment: Alignment.center,
-                              child: const Text('Gagal memuat gambar'),
-                            );
-                          },
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (_) => Dialog(
+                                  backgroundColor: Colors.black,
+                                  child: InteractiveViewer(
+                                    child: Image.network(
+                                      _previewImageUrl!,
+                                      fit: BoxFit.contain,
+                                      errorBuilder: (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        return const Padding(
+                                          padding: EdgeInsets.all(20),
+                                          child: Text(
+                                            'Gagal memuat gambar',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                          );
+                        },
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Image.network(
+                            _previewImageUrl!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[300],
+                                alignment: Alignment.center,
+                                child: const Text('Gagal memuat gambar'),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
