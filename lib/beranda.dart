@@ -191,7 +191,7 @@ class _BerandaPageState extends State<BerandaPage> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Temukan hotel terbaik di Kota Solo untuk pengalaman menginap yang tak terlupakan',
+                      'Jelajahi berbagai rekomendasi hotel terbaik di Kota Solo',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 14),
                     ),
