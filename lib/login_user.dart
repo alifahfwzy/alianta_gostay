@@ -139,7 +139,7 @@ class _LoginUserState extends State<LoginUser> {
 
     // Validasi input kosong
     if (email.isEmpty || password.isEmpty) {
-      _showSnackBar('Email dan password harus diisi', Colors.red);
+      _showSnackBar('Email dan password harus diisi!', Colors.red);
       return;
     }
 
