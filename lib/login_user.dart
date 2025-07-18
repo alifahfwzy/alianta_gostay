@@ -115,7 +115,7 @@ class _LoginUserState extends State<LoginUser> {
                   Icon(Icons.touch_app, color: Colors.grey.shade600, size: 16),
                   const SizedBox(width: 6),
                   Text(
-                    'Tap di luar untuk menutup',
+                    'Tap di luar untuk menutup!',
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontSize: 12,
