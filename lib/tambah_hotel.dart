@@ -131,7 +131,7 @@ class _TambahHotelState extends State<TambahHotel> {
       appBar: AppBar(
         title: Text(
           widget.hotel == null ? 'Tambah Hotel' : 'Edit Hotel',
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -332,7 +332,7 @@ class _TambahHotelState extends State<TambahHotel> {
                 ElevatedButton(
                   onPressed: _isLoading ? null : _simpanHotel,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
