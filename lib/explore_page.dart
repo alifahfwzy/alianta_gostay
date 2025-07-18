@@ -311,11 +311,6 @@ class _ExplorePageState extends State<ExplorePage> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Sangat Bagus',
-                          style: TextStyle(fontSize: 13, color: Colors.grey),
-                        ),
                       ],
                     ),
                   ],
