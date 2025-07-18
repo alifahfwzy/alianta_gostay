@@ -50,7 +50,6 @@ class TampilanDetailHotel extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(hotel.rating.toString(), style: const TextStyle(fontSize: 14)),
                 const SizedBox(width: 6),
-                const Text('Sangat Bagus', style: TextStyle(fontSize: 14, color: Colors.black54))
               ],
             ),
             const SizedBox(height: 8),
