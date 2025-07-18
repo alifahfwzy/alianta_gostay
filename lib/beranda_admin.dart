@@ -57,7 +57,7 @@ class _BerandaAdminState extends State<BerandaAdmin> {
       MaterialPageRoute(builder: (context) => const TambahHotel()),
     ).then((result) {
       if (result == true) {
-        _showSnackBar('Hotel berhasil ditambahkan', Colors.green);
+        _showSnackBar(' data Hotel berhasil ditambahkan', Colors.green);
         _loadHotels();
       }
     });
