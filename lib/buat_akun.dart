@@ -101,7 +101,7 @@ class _BuatAkunState extends State<BuatAkun> {
         final String errorMsg =
             result['message'] ?? 'Terjadi kesalahan saat registrasi';
         _showSnackBar(errorMsg, Colors.red);
-        print('❌ Registrasi gagal: $errorMsg');
+        print('❌ Registrasi Gagal: $errorMsg');
       }
     } catch (e) {
       print('❌ Error registrasi exception: $e');
