@@ -25,20 +25,18 @@ class _TambahHotelState extends State<TambahHotel> {
   bool _gym = false;
   bool _isLoading = false;
 
+  double? _rating;
+
   @override
   void initState() {
     super.initState();
-    // Mengisi form dengan data hotel yang ada jika dalam mode edit
     if (widget.hotel != null) {
       _namaHotelController.text = widget.hotel!.name;
       _alamatController.text = widget.hotel!.location;
       _deskripsiController.text = widget.hotel!.description;
-      _linkGambarController.text =
-          widget.hotel!.imageUrl ??
-          'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400';
-      print('Debug - Description: ${widget.hotel!.description}'); // Debug line
+      _linkGambarController.text = widget.hotel!.imageUrl ?? '';
+      _rating = widget.hotel!.rating;
 
-      // Mengatur fasilitas yang ada
       _freeWifi = widget.hotel!.facilities.contains('Free Wi-Fi');
       _swimmingPool = widget.hotel!.facilities.contains('Swimming Pool');
       _parking = widget.hotel!.facilities.contains('Parking');
@@ -63,7 +61,6 @@ class _TambahHotelState extends State<TambahHotel> {
       });
 
       try {
-        // Kumpulkan fasilitas yang dipilih
         List<String> selectedFacilities = [];
         if (_freeWifi) selectedFacilities.add('Free Wi-Fi');
         if (_swimmingPool) selectedFacilities.add('Swimming Pool');
@@ -71,13 +68,8 @@ class _TambahHotelState extends State<TambahHotel> {
         if (_restaurant) selectedFacilities.add('Restaurant');
         if (_gym) selectedFacilities.add('Gym');
 
-        // Buat objek hotel
-        print(
-          'Debug - Saving description: ${_deskripsiController.text}',
-        ); // Debug line
-
         Hotel hotel = Hotel(
-          id: widget.hotel?.id, // Only set ID if editing existing hotel
+          id: widget.hotel?.id,
           name: _namaHotelController.text.trim(),
           location: _alamatController.text.trim(),
           description: _deskripsiController.text.trim(),
@@ -86,21 +78,14 @@ class _TambahHotelState extends State<TambahHotel> {
               _linkGambarController.text.trim().isEmpty
                   ? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400'
                   : _linkGambarController.text.trim(),
-          rating: widget.hotel?.rating ?? 4.0,
+          rating: _rating ?? 4.0,
         );
 
-        // Simpan atau update hotel
         Map<String, dynamic> result;
         if (widget.hotel == null) {
-          print('Debug - Adding new hotel');
-          print('Debug - Hotel data: ${hotel.toJson()}');
           result = await HotelService.addHotel(hotel);
-          print('Debug - Add result: $result');
         } else {
-          print('Debug - Updating hotel with ID: ${widget.hotel!.id}');
-          print('Debug - Update data: ${hotel.toJson()}');
           result = await HotelService.updateHotel(widget.hotel!.id!, hotel);
-          print('Debug - Update result: $result');
         }
 
         if (result['success'] == true) {
@@ -109,7 +94,6 @@ class _TambahHotelState extends State<TambahHotel> {
           _showErrorMessage(result['message'] ?? 'Gagal menyimpan hotel');
         }
       } catch (e) {
-        print('Debug - Error saving hotel: $e');
         _showErrorMessage('Error: ${e.toString()}');
       } finally {
         setState(() {
@@ -145,7 +129,6 @@ class _TambahHotelState extends State<TambahHotel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Nama Hotel
                 TextFormField(
                   controller: _namaHotelController,
                   decoration: InputDecoration(
@@ -154,16 +137,13 @@ class _TambahHotelState extends State<TambahHotel> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nama hotel harus diisi';
-                    }
-                    return null;
-                  },
+                  validator:
+                      (value) =>
+                          value == null || value.isEmpty
+                              ? 'Nama hotel harus diisi'
+                              : null,
                 ),
                 const SizedBox(height: 16),
-
-                // Alamat
                 TextFormField(
                   controller: _alamatController,
                   decoration: InputDecoration(
@@ -172,16 +152,13 @@ class _TambahHotelState extends State<TambahHotel> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Alamat harus diisi';
-                    }
-                    return null;
-                  },
+                  validator:
+                      (value) =>
+                          value == null || value.isEmpty
+                              ? 'Alamat harus diisi'
+                              : null,
                 ),
                 const SizedBox(height: 16),
-
-                // Deskripsi
                 TextFormField(
                   controller: _deskripsiController,
                   decoration: InputDecoration(
@@ -191,16 +168,13 @@ class _TambahHotelState extends State<TambahHotel> {
                     ),
                   ),
                   maxLines: 3,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Deskripsi harus diisi';
-                    }
-                    return null;
-                  },
+                  validator:
+                      (value) =>
+                          value == null || value.isEmpty
+                              ? 'Deskripsi harus diisi'
+                              : null,
                 ),
                 const SizedBox(height: 16),
-
-                // Link Gambar
                 TextFormField(
                   controller: _linkGambarController,
                   decoration: InputDecoration(
@@ -212,63 +186,68 @@ class _TambahHotelState extends State<TambahHotel> {
                   ),
                 ),
                 const SizedBox(height: 24),
-
-                // Fasilitas Section
                 const Text(
                   'Fasilitas Hotel',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
-
-                // Checkbox Fasilitas
                 CheckboxListTile(
                   title: const Text('Free Wi-Fi'),
                   value: _freeWifi,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _freeWifi = value ?? false;
-                    });
-                  },
+                  onChanged: (val) => setState(() => _freeWifi = val ?? false),
                 ),
                 CheckboxListTile(
                   title: const Text('Swimming Pool'),
                   value: _swimmingPool,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _swimmingPool = value ?? false;
-                    });
-                  },
+                  onChanged:
+                      (val) => setState(() => _swimmingPool = val ?? false),
                 ),
                 CheckboxListTile(
                   title: const Text('Parking'),
                   value: _parking,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _parking = value ?? false;
-                    });
-                  },
+                  onChanged: (val) => setState(() => _parking = val ?? false),
                 ),
                 CheckboxListTile(
                   title: const Text('Restaurant'),
                   value: _restaurant,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _restaurant = value ?? false;
-                    });
-                  },
+                  onChanged:
+                      (val) => setState(() => _restaurant = val ?? false),
                 ),
                 CheckboxListTile(
                   title: const Text('Gym'),
                   value: _gym,
-                  onChanged: (bool? value) {
+                  onChanged: (val) => setState(() => _gym = val ?? false),
+                ),
+                const SizedBox(height: 24),
+
+                // Rating Dropdown
+                DropdownButtonFormField<double>(
+                  value: _rating,
+                  decoration: InputDecoration(
+                    labelText: 'Rating Hotel (1.0 - 5.0)',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  items:
+                      [1.0, 2.0, 3.0, 4.0, 5.0].map((value) {
+                        return DropdownMenuItem<double>(
+                          value: value,
+                          child: Text(value.toString()),
+                        );
+                      }).toList(),
+                  onChanged: (value) {
                     setState(() {
-                      _gym = value ?? false;
+                      _rating = value;
                     });
+                  },
+                  validator: (value) {
+                    if (value == null) return 'Rating harus dipilih';
+                    return null;
                   },
                 ),
                 const SizedBox(height: 24),
 
-                // Submit Button
                 ElevatedButton(
                   onPressed: _isLoading ? null : _simpanHotel,
                   style: ElevatedButton.styleFrom(

@@ -28,7 +28,6 @@ class HotelService {
     try {
       print('🔄 Attempting to add hotel to database...');
 
-      // Gunakan data yang sesuai dengan struktur database yang ada
       Map<String, dynamic> data = {
         'name': hotel.name,
         'location': hotel.location,
@@ -36,43 +35,25 @@ class HotelService {
         'image_url':
             hotel.imageUrl ??
             'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
-        'rating': hotel.rating ?? 0.0,
+        'description': hotel.description,
+        'rating': hotel.rating, // <-- Rating dimasukkan di sini
         'created_at': DateTime.now().toIso8601String(),
         'updated_at': DateTime.now().toIso8601String(),
       };
 
-      // Tambahkan kolom tambahan jika ada di database
-      if (hotel.description.isNotEmpty) {
-        data['description'] = hotel.description;
-      }
-
       print('📝 Data to be inserted: $data');
 
-      try {
-        final response =
-            await _client.from('hotels').insert(data).select().single();
+      final response =
+          await _client.from('hotels').insert(data).select().single();
 
-        print('✅ Hotel successfully added with response: $response');
-        return {'success': true, 'message': 'Hotel berhasil ditambahkan'};
-      } catch (e) {
-        print('❌ Error during database operation: $e');
-        return {
-          'success': false,
-          'message': 'Gagal menambahkan hotel: ${e.toString()}',
-        };
-      }
+      print('✅ Hotel successfully added with response: $response');
+      return {'success': true, 'message': 'Hotel berhasil ditambahkan'};
     } catch (e) {
-      print('❌ Error adding hotel: $e');
-
-      // More specific error handling
-      String errorMessage = 'Gagal menambahkan hotel';
-      if (e.toString().contains('duplicate key')) {
-        errorMessage = 'Hotel dengan nama ini sudah ada';
-      } else if (e.toString().contains('violates foreign key')) {
-        errorMessage = 'Data referensi tidak valid';
-      }
-
-      return {'success': false, 'message': errorMessage};
+      print('❌ Error during database operation: $e');
+      return {
+        'success': false,
+        'message': 'Gagal menambahkan hotel: ${e.toString()}',
+      };
     }
   }
 
@@ -82,21 +63,17 @@ class HotelService {
     Hotel hotel,
   ) async {
     try {
-      // Gunakan data yang sesuai dengan struktur database
       Map<String, dynamic> data = {
         'name': hotel.name,
         'location': hotel.location,
-        'rating': hotel.rating ?? 0.0,
-        'image_url': hotel.imageUrl,
+        'description': hotel.description,
         'facilities': hotel.facilities,
+        'image_url': hotel.imageUrl,
+        'rating': hotel.rating, // <-- Update rating juga
+        'updated_at': DateTime.now().toIso8601String(),
       };
 
-      // Tambahkan kolom tambahan jika ada di database
-      if (hotel.description.isNotEmpty) {
-        data['description'] = hotel.description;
-      }
-
-      print('Debug - Updating hotel with data: $data');
+      print('🔄 Updating hotel with data: $data');
 
       await _client.from('hotels').update(data).eq('id', id);
 
@@ -124,7 +101,7 @@ class HotelService {
     }
   }
 
-  // Search hotels
+  // Search hotels (by name or location)
   static Future<List<Hotel>> searchHotels(String query) async {
     try {
       final response = await _client
@@ -139,6 +116,26 @@ class HotelService {
       return hotels;
     } catch (e) {
       print('❌ Error searching hotels: $e');
+      return [];
+    }
+  }
+
+  // Optional: Filter rating >= value
+  static Future<List<Hotel>> filterByRating(double minRating) async {
+    try {
+      final response = await _client
+          .from('hotels')
+          .select()
+          .gte('rating', minRating)
+          .order('rating', ascending: false);
+
+      List<Hotel> hotels = [];
+      for (var item in (response as List)) {
+        hotels.add(Hotel.fromJson(item));
+      }
+      return hotels;
+    } catch (e) {
+      print('❌ Error filtering hotels by rating: $e');
       return [];
     }
   }
