@@ -72,7 +72,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Login Admin GoStay',
+                    'Login Admin ',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
