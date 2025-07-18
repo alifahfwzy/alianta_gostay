@@ -121,7 +121,7 @@ class _BerandaAdminState extends State<BerandaAdmin> {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: const Text(
-          "Dashboard ",
+          "Dashboard Admin",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         backgroundColor: Colors.white,
