@@ -98,7 +98,7 @@ class _LoginUserState extends State<LoginUser> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Anda harus membuat akun terlebih dahulu untuk dapat login ke aplikasi.',
+                        'Anda harus membuat akun terlebih dahulu untuk dapat login ke aplikasi!',
                         style: TextStyle(
                           color: Colors.orange.shade800,
                           fontSize: 13,
