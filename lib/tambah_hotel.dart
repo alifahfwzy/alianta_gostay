@@ -26,6 +26,7 @@ class _TambahHotelState extends State<TambahHotel> {
   bool _isLoading = false;
 
   double? _rating;
+  String? _previewImageUrl;
 
   @override
   void initState() {
@@ -42,7 +43,22 @@ class _TambahHotelState extends State<TambahHotel> {
       _parking = widget.hotel!.facilities.contains('Parking');
       _restaurant = widget.hotel!.facilities.contains('Restaurant');
       _gym = widget.hotel!.facilities.contains('Gym');
+
+      _previewImageUrl = widget.hotel!.imageUrl;
     }
+
+    _linkGambarController.addListener(() {
+      final link = _linkGambarController.text.trim();
+      if (Uri.tryParse(link)?.isAbsolute == true) {
+        setState(() {
+          _previewImageUrl = link;
+        });
+      } else {
+        setState(() {
+          _previewImageUrl = null;
+        });
+      }
+    });
   }
 
   @override
@@ -184,7 +200,45 @@ class _TambahHotelState extends State<TambahHotel> {
                     ),
                     hintText: 'https://example.com/image.jpg',
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return null;
+                    final uri = Uri.tryParse(value);
+                    if (uri == null || (!uri.isAbsolute)) {
+                      return 'Masukkan URL gambar yang valid';
+                    }
+                    return null;
+                  },
                 ),
+                const SizedBox(height: 12),
+                if (_previewImageUrl != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Preview Gambar:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          _previewImageUrl!,
+                          height: 180,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              height: 180,
+                              width: double.infinity,
+                              color: Colors.grey[300],
+                              alignment: Alignment.center,
+                              child: const Text('Gagal memuat gambar'),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 const SizedBox(height: 24),
                 const Text(
                   'Fasilitas Hotel',
@@ -219,8 +273,6 @@ class _TambahHotelState extends State<TambahHotel> {
                   onChanged: (val) => setState(() => _gym = val ?? false),
                 ),
                 const SizedBox(height: 24),
-
-                // Rating Dropdown
                 DropdownButtonFormField<double>(
                   value: _rating,
                   decoration: InputDecoration(
@@ -247,7 +299,6 @@ class _TambahHotelState extends State<TambahHotel> {
                   },
                 ),
                 const SizedBox(height: 24),
-
                 ElevatedButton(
                   onPressed: _isLoading ? null : _simpanHotel,
                   style: ElevatedButton.styleFrom(
