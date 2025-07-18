@@ -14,7 +14,6 @@ class Profil extends StatefulWidget {
 class _ProfilState extends State<Profil> {
   String _namaPengguna = '';
   String _email = '';
-  String _bergabungSejak = '';
   late TextEditingController _controllerNama;
 
   @override
@@ -22,7 +21,6 @@ class _ProfilState extends State<Profil> {
     super.initState();
     _controllerNama = TextEditingController();
     _loadUserData();
-    _loadBergabungSejak();
   }
 
   Future<void> _loadUserData() async {
@@ -31,21 +29,6 @@ class _ProfilState extends State<Profil> {
       _namaPengguna = prefs.getString('username') ?? 'Nama Pengguna';
       _email = prefs.getString('email') ?? 'namauser@gmail.com';
       _controllerNama.text = _namaPengguna;
-    });
-  }
-
-  Future<void> _loadBergabungSejak() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? tanggal = prefs.getString('bergabung_sejak');
-
-    if (tanggal == null) {
-      final now = DateTime.now();
-      tanggal = "${now.day}-${now.month}-${now.year}";
-      await prefs.setString('bergabung_sejak', tanggal);
-    }
-
-    setState(() {
-      _bergabungSejak = tanggal!;
     });
   }
 
@@ -109,20 +92,6 @@ class _ProfilState extends State<Profil> {
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Bergabung sejak:', style: TextStyle(fontSize: 16)),
-                Text(
-                  _bergabungSejak,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text('Status Akun:', style: TextStyle(fontSize: 16)),
                 Text(
@@ -150,7 +119,6 @@ class _ProfilState extends State<Profil> {
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.remove('username');
                   await prefs.remove('email');
-                  // Jangan hapus bergabung_sejak agar tidak reset
 
                   Navigator.pushAndRemoveUntil(
                     context,
@@ -198,6 +166,5 @@ class _ProfilState extends State<Profil> {
         ],
       ),
     );
-  } 
+  }
 }
-   
