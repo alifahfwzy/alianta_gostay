@@ -70,7 +70,7 @@ class _BerandaAdminState extends State<BerandaAdmin> {
         return AlertDialog(
           title: const Text('Konfirmasi Hapus'),
           content: Text(
-            'Apakah Anda yakin ingin menghapus hotel "${_hotels[index].name}"?',
+            'Apakah Anda ingin menghapus hotel "${_hotels[index].name}"?',
           ),
           actions: [
             TextButton(
