@@ -166,7 +166,7 @@ class _BerandaAdminState extends State<BerandaAdmin> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Tambahkan hotel pertama ',
+                          'Tambahkan hotel pertama Anda',
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
