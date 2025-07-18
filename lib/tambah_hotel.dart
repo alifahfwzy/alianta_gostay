@@ -261,7 +261,7 @@ class _TambahHotelState extends State<TambahHotel> {
                               return Container(
                                 color: Colors.grey[300],
                                 alignment: Alignment.center,
-                                child: const Text('Gagal memuat gambar'),
+                                child: const Text('Gagal memuat '),
                               );
                             },
                           ),
