@@ -36,7 +36,7 @@ class _BerandaAdminState extends State<BerandaAdmin> {
       setState(() {
         _isLoading = false;
       });
-      _showSnackBar('Gagal memuat hotel: $e', Colors.red);
+      _showSnackBar('Gagal memuat data hotel: $e', Colors.red);
     }
   }
 
