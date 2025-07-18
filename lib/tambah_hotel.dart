@@ -332,7 +332,7 @@ class _TambahHotelState extends State<TambahHotel> {
                 ElevatedButton(
                   onPressed: _isLoading ? null : _simpanHotel,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    backgroundColor: const Color.fromARGB(255, 214, 209, 209),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
