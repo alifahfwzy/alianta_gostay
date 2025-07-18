@@ -241,8 +241,8 @@ class _BerandaPageState extends State<BerandaPage> {
                             children: [
                               // Hotel Image
                               Container(
-                                width: 80,
-                                height: 80,
+                                width: 120,
+                                height: 120,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
