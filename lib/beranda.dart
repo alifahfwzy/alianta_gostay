@@ -373,13 +373,6 @@ class _BerandaPageState extends State<BerandaPage> {
                                           ),
                                         ),
                                         const SizedBox(width: 8),
-                                        const Text(
-                                          'Sangat Bagus',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
                                       ],
                                     ),
                                   ],
