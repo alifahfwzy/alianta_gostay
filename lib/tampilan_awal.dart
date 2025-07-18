@@ -178,7 +178,7 @@ class _TampilanAwalState extends State<TampilanAwal>
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _buildFeatureItem(Icons.place, 'Kota Solo'),
-                              _buildFeatureItem(Icons.star_rate, 'Rating Admin'),
+                              _buildFeatureItem(Icons.star_rate, 'Rating'),
                               _buildFeatureItem(Icons.info_outline, 'Rekomendasi'),
                             ],
                           ),
