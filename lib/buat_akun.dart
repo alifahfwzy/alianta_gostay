@@ -153,7 +153,7 @@ class _BuatAkunState extends State<BuatAkun> {
               Icon(Icons.check_circle, color: Colors.green, size: 24),
               const SizedBox(width: 8),
               const Text(
-                'Registrasi Berhasil',
+                'Registrasi Berhasil!',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
