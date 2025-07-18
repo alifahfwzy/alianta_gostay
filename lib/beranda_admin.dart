@@ -225,6 +225,14 @@ class _BerandaAdminState extends State<BerandaAdmin> {
                                           color: Colors.black87,
                                         ),
                                       ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Rating: ${hotel.rating?.toStringAsFixed(1) ?? '0'}',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
