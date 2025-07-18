@@ -131,7 +131,7 @@ class _TambahHotelState extends State<TambahHotel> {
       appBar: AppBar(
         title: Text(
           widget.hotel == null ? 'Tambah Hotel' : 'Edit Hotel',
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
