@@ -132,9 +132,9 @@ class _TampilanAwalState extends State<TampilanAwal>
                             ],
                           ),
                           const SizedBox(height: 40),
-                          // Main Title with enhanced styling
+                          // Main Title with location focus
                           const Text(
-                            'Welcome to Your\nNext Stay',
+                            'Jelajahi Hotel\nTerbaik di Solo',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 28,
@@ -151,18 +151,18 @@ class _TampilanAwalState extends State<TampilanAwal>
                             ),
                           ),
                           const SizedBox(height: 12),
-                          // Subtitle with icon
+                          // Subtitle with Solo focus
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.star,
+                                Icons.location_city,
                                 color: Colors.white.withOpacity(0.8),
                                 size: 16,
                               ),
                               const SizedBox(width: 8),
                               const Text(
-                                'GoStay - Your Perfect Stay Companion',
+                                'GoStay Solo - Panduan Hotel Terpercaya',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -170,22 +170,16 @@ class _TampilanAwalState extends State<TampilanAwal>
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              Icon(
-                                Icons.star,
-                                color: Colors.white.withOpacity(0.8),
-                                size: 16,
-                              ),
                             ],
                           ),
                           const SizedBox(height: 20),
-                          // Feature highlights
+                          // Feature highlights - Solo focused
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              _buildFeatureItem(Icons.location_on, 'Lokasi Terbaik'),
-                              _buildFeatureItem(Icons.price_check, 'Harga Terjangkau'),
-                              _buildFeatureItem(Icons.thumb_up, 'Review Terpercaya'),
+                              _buildFeatureItem(Icons.place, 'Kota Solo'),
+                              _buildFeatureItem(Icons.star_rate, 'Rating Admin'),
+                              _buildFeatureItem(Icons.info_outline, 'Rekomendasi'),
                             ],
                           ),
                         ],
@@ -226,7 +220,7 @@ class _TampilanAwalState extends State<TampilanAwal>
                           ),
                           const SizedBox(width: 8),
                           const Text(
-                            'Cari Sekarang',
+                            'Temukan Hotel',
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -236,9 +230,9 @@ class _TampilanAwalState extends State<TampilanAwal>
                         ],
                       ),
                       const SizedBox(height: 16),
-                      // Description
+                      // Description - Solo focused
                       const Text(
-                        'Temukan hotel menakjubkan dan nikmati kebebasan bermain saat anda tiba bersama orang tersayang',
+                        'Dapatkan rekomendasi hotel terbaik di Solo dengan rating dan ulasan yang telah dikurasi khusus untuk Anda',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,
@@ -247,26 +241,55 @@ class _TampilanAwalState extends State<TampilanAwal>
                         ),
                       ),
                       const SizedBox(height: 24),
-                      // Stats row
+                      // Stats row - Solo specific
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildStatItem('1000+', 'Hotel'),
+                          _buildStatItem('50+', 'Hotel'),
                           Container(
                             width: 1,
                             height: 30,
                             color: Colors.grey[300],
                           ),
-                          _buildStatItem('50+', 'Kota'),
+                          _buildStatItem('Solo', 'Kota'),
                           Container(
                             width: 1,
                             height: 30,
                             color: Colors.grey[300],
                           ),
-                          _buildStatItem('10k+', 'Pelanggan'),
+                          _buildStatItem('Terpercaya', 'Rating'),
                         ],
                       ),
                       const SizedBox(height: 24),
+                      // Info badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              color: Colors.orange[700],
+                              size: 16,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Hanya rekomendasi, tidak untuk booking',
+                              style: TextStyle(
+                                color: Colors.orange[700],
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       // "Masuk" Button with enhanced styling
                       Container(
                         width: 200,
