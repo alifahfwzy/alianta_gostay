@@ -76,7 +76,7 @@ class _LoginUserState extends State<LoginUser> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Sepertinya Anda belum memiliki akun di sistem kami!',
+                'Sepertinya Anda belum memiliki akun di sistem kami.',
                 style: TextStyle(fontSize: 14, height: 1.4),
               ),
               const SizedBox(height: 12),
