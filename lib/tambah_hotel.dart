@@ -281,7 +281,7 @@ class _TambahHotelState extends State<TambahHotel> {
                   onChanged: (val) => setState(() => _freeWifi = val ?? false),
                 ),
                 CheckboxListTile(
-                  title: const Text('Swimming '),
+                  title: const Text('Swimming Pool'),
                   value: _swimmingPool,
                   onChanged:
                       (val) => setState(() => _swimmingPool = val ?? false),
