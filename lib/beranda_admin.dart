@@ -89,7 +89,7 @@ class _BerandaAdminState extends State<BerandaAdmin> {
                     _loadHotels();
                   } else {
                     _showSnackBar(
-                      result['message'] ?? 'Gagal menghapus hotel',
+                      result['message'] ?? 'Gagal menghapus ',
                       Colors.red,
                     );
                   }
