@@ -48,8 +48,10 @@ class TampilanDetailHotel extends StatelessWidget {
               children: [
                 const Icon(Icons.star, color: Colors.amber, size: 20),
                 const SizedBox(width: 4),
-                Text(hotel.rating.toString(), style: const TextStyle(fontSize: 14)),
-                const SizedBox(width: 6),
+                Text(
+                  (hotel.rating ?? 0).toStringAsFixed(1),
+                  style: const TextStyle(fontSize: 14),
+                ),
               ],
             ),
             const SizedBox(height: 8),
@@ -60,9 +62,9 @@ class TampilanDetailHotel extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            const Text(
-              'Experience luxury and comfort at this hotel...',
-              style: TextStyle(fontSize: 14, color: Colors.black54),
+            Text(
+              hotel.description ?? 'Deskripsi belum tersedia.',
+              style: const TextStyle(fontSize: 14, color: Colors.black54),
             ),
             const SizedBox(height: 16),
 
