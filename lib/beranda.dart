@@ -178,10 +178,11 @@ class _BerandaPageState extends State<BerandaPage> {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     Text(
                       'Selamat Datang di Solo!',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
@@ -191,6 +192,7 @@ class _BerandaPageState extends State<BerandaPage> {
                     SizedBox(height: 8),
                     Text(
                       'Temukan hotel terbaik di Kota Solo untuk pengalaman menginap yang tak terlupakan',
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 14),
                     ),
                   ],
