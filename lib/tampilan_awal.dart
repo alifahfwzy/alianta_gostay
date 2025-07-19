@@ -8,7 +8,7 @@ class TampilanAwal extends StatefulWidget {
   State<TampilanAwal> createState() => _TampilanAwalState();
 }
 
-class _TampilanAwalState extends State<TampilanAwal> 
+class _TampilanAwalState extends State<TampilanAwal>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -21,23 +21,18 @@ class _TampilanAwalState extends State<TampilanAwal>
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-    
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.5),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
-    
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
+
     _animationController.forward();
   }
 
@@ -50,23 +45,25 @@ class _TampilanAwalState extends State<TampilanAwal>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // Top Section with Gradient Background
-          Expanded(
-            flex: 3,
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Top Section
+              Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
+                  ),
                 ),
-              ),
-              child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 32,
+                  ),
                   child: FadeTransition(
                     opacity: _fadeAnimation,
                     child: SlideTransition(
@@ -74,10 +71,8 @@ class _TampilanAwalState extends State<TampilanAwal>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Floating decoration elements
                           Stack(
                             children: [
-                              // Background decorative circles
                               Positioned(
                                 top: -20,
                                 right: -10,
@@ -102,7 +97,6 @@ class _TampilanAwalState extends State<TampilanAwal>
                                   ),
                                 ),
                               ),
-                              // Logo/Icon Container with enhanced styling
                               Container(
                                 width: 120,
                                 height: 120,
@@ -132,7 +126,6 @@ class _TampilanAwalState extends State<TampilanAwal>
                             ],
                           ),
                           const SizedBox(height: 40),
-                          // Main Title with location focus
                           const Text(
                             'Jelajahi Hotel\nTerbaik di Solo',
                             textAlign: TextAlign.center,
@@ -151,7 +144,6 @@ class _TampilanAwalState extends State<TampilanAwal>
                             ),
                           ),
                           const SizedBox(height: 12),
-                          // Subtitle with Solo focus
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -163,7 +155,6 @@ class _TampilanAwalState extends State<TampilanAwal>
                               const SizedBox(width: 8),
                               const Text(
                                 'GoStay Solo - Panduan Hotel Terpercaya',
-                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,
@@ -173,13 +164,15 @@ class _TampilanAwalState extends State<TampilanAwal>
                             ],
                           ),
                           const SizedBox(height: 20),
-                          // Feature highlights - Solo focused
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _buildFeatureItem(Icons.place, 'Kota Solo'),
                               _buildFeatureItem(Icons.star_rate, 'Rating'),
-                              _buildFeatureItem(Icons.info_outline, 'Rekomendasi'),
+                              _buildFeatureItem(
+                                Icons.info_outline,
+                                'Rekomendasi',
+                              ),
                             ],
                           ),
                         ],
@@ -188,38 +181,22 @@ class _TampilanAwalState extends State<TampilanAwal>
                   ),
                 ),
               ),
-            ),
-          ),
-          // Bottom Section with enhanced styling
-          Expanded(
-            flex: 2,
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(0),
-                  topRight: Radius.circular(0),
-                ),
-              ),
-              child: Padding(
+
+              // Bottom Section
+              Container(
+                width: double.infinity,
                 padding: const EdgeInsets.all(32.0),
+                decoration: const BoxDecoration(color: Colors.white),
                 child: FadeTransition(
                   opacity: _fadeAnimation,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // "Cari Sekarang" Title with icon
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: Colors.black87,
-                            size: 24,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
+                        children: const [
+                          Icon(Icons.search, color: Colors.black87, size: 24),
+                          SizedBox(width: 8),
+                          Text(
                             'Temukan Hotel',
                             style: TextStyle(
                               fontSize: 22,
@@ -230,7 +207,6 @@ class _TampilanAwalState extends State<TampilanAwal>
                         ],
                       ),
                       const SizedBox(height: 16),
-                      // Description - Solo focused
                       const Text(
                         'Dapatkan rekomendasi hotel terbaik di Solo dengan rating dan ulasan yang telah dikurasi khusus untuk Anda',
                         textAlign: TextAlign.center,
@@ -241,11 +217,10 @@ class _TampilanAwalState extends State<TampilanAwal>
                         ),
                       ),
                       const SizedBox(height: 24),
-                      // Stats row - Solo specific
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildStatItem('50+', 'Hotel'),
+                          _buildStatItem('20+', 'Hotel'),
                           Container(
                             width: 1,
                             height: 30,
@@ -261,13 +236,17 @@ class _TampilanAwalState extends State<TampilanAwal>
                         ],
                       ),
                       const SizedBox(height: 24),
-                      // Info badge
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.orange.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                          border: Border.all(
+                            color: Colors.orange.withOpacity(0.3),
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -290,7 +269,6 @@ class _TampilanAwalState extends State<TampilanAwal>
                         ),
                       ),
                       const SizedBox(height: 16),
-                      // "Masuk" Button with enhanced styling
                       Container(
                         width: 200,
                         height: 48,
@@ -320,10 +298,10 @@ class _TampilanAwalState extends State<TampilanAwal>
                             ),
                             elevation: 0,
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
+                              Text(
                                 'Masuk',
                                 style: TextStyle(
                                   color: Colors.white,
@@ -331,8 +309,8 @@ class _TampilanAwalState extends State<TampilanAwal>
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              const Icon(
+                              SizedBox(width: 8),
+                              Icon(
                                 Icons.arrow_forward,
                                 color: Colors.white,
                                 size: 18,
@@ -345,9 +323,9 @@ class _TampilanAwalState extends State<TampilanAwal>
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -361,11 +339,7 @@ class _TampilanAwalState extends State<TampilanAwal>
             color: Colors.white.withOpacity(0.2),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 20,
-          ),
+          child: Icon(icon, color: Colors.white, size: 20),
         ),
         const SizedBox(height: 4),
         Text(
@@ -391,13 +365,7 @@ class _TampilanAwalState extends State<TampilanAwal>
             color: Color(0xFF29B6F6),
           ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
-        ),
+        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
       ],
     );
   }
