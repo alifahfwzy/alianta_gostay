@@ -18,7 +18,7 @@ class _LoginAdminState extends State<LoginAdmin> {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (username == 'admin gostay' && password == 'alianta gostay') {
+    if (username == 'admin gostay' && password == 'aliantagostay') {
       showDialog(
         context: context,
         builder:
