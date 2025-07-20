@@ -10,9 +10,9 @@ class HotelDatabase {
   static Future<void> loadHotels() async {
     try {
       _hotels = await HotelService.getAllHotels();
-      print('✅ Berhasil load ${_hotels.length} hotel dari database');
+      debugPrint('✅ Berhasil load ${_hotels.length} hotel dari database');
     } catch (e) {
-      print('❌ Error loading hotels: $e');
+      debugPrint('❌ Error loading hotels: $e');
       // Fallback ke data dummy jika error
       _hotels = _getDummyHotels();
     }
@@ -95,7 +95,7 @@ class HotelDatabase {
       }
       return false;
     } catch (e) {
-      print('❌ Error adding hotel: $e');
+      debugPrint('❌ Error adding hotel: $e');
       return false;
     }
   }
@@ -111,7 +111,7 @@ class HotelDatabase {
       }
       return false;
     } catch (e) {
-      print('❌ Error deleting hotel: $e');
+      debugPrint('❌ Error deleting hotel: $e');
       return false;
     }
   }
@@ -130,7 +130,7 @@ class HotelDatabase {
       }
       return false;
     } catch (e) {
-      print('❌ Error updating hotel: $e');
+      debugPrint('❌ Error updating hotel: $e');
       return false;
     }
   }
@@ -139,7 +139,7 @@ class HotelDatabase {
     try {
       return await HotelService.searchHotels(query);
     } catch (e) {
-      print('❌ Error searching hotels: $e');
+      debugPrint('❌ Error searching hotels: $e');
       return [];
     }
   }

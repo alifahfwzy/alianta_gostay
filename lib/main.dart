@@ -8,40 +8,40 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    print('🔄 Memulai inisialisasi aplikasi GoStay...');
+    debugPrint('🔄 Memulai inisialisasi aplikasi GoStay...');
 
     // Initialize Supabase
     await SupabaseConfig.initialize();
-    print('✅ Supabase berhasil diinisialisasi');
+    debugPrint('✅ Supabase berhasil diinisialisasi');
 
     // Pastikan kita menggunakan URL dan credentials yang benar
-    print('📝 Menggunakan Supabase URL: ${SupabaseConfig.supabaseUrl}');
+    debugPrint('📝 Menggunakan Supabase URL: ${SupabaseConfig.supabaseUrl}');
 
     try {
       // Test koneksi dengan timeout
-      print('🔄 Melakukan test koneksi Supabase...');
+      debugPrint('🔄 Melakukan test koneksi Supabase...');
       bool connected = await SupabaseConfig.testConnection();
 
       if (connected) {
-        print('✅ Koneksi ke Supabase berhasil');
+        debugPrint('✅ Koneksi ke Supabase berhasil');
 
         // Check if database tables exist (doesn't create them)
-        print('🔄 Memeriksa keberadaan tabel di database...');
+        debugPrint('🔄 Memeriksa keberadaan tabel di database...');
         await SetupDatabase.setupAllTables();
 
         // Check for default admin
-        print('🔄 Memeriksa keberadaan admin default...');
+        debugPrint('🔄 Memeriksa keberadaan admin default...');
         await AdminService.createDefaultAdmin();
       } else {
-        print('❌ Gagal terhubung ke Supabase');
+        debugPrint('❌ Gagal terhubung ke Supabase');
       }
     } catch (connectionError) {
-      print('❌ Error saat test koneksi: $connectionError');
+      debugPrint('❌ Error saat test koneksi: $connectionError');
     }
 
-    print('🚀 Aplikasi GoStay siap dijalankan!');
+    debugPrint('🚀 Aplikasi GoStay siap dijalankan!');
   } catch (e) {
-    print('❌ Error inisialisasi aplikasi: $e');
+    debugPrint('❌ Error inisialisasi aplikasi: $e');
   }
 
   runApp(const MyApp());

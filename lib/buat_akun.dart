@@ -81,10 +81,10 @@ class _BuatAkunState extends State<BuatAkun> {
 
     try {
       // Menampilkan status untuk debugging
-      print('💡 Mencoba mendaftarkan: $email, $username');
+      debugPrint('💡 Mencoba mendaftarkan: $email, $username');
 
       // Tambahkan delay untuk memastikan koneksi stabil
-      print('⏳ Menunggu koneksi internet...');
+      debugPrint('⏳ Menunggu koneksi internet...');
       await Future.delayed(const Duration(seconds: 1));
 
       // Coba mendaftarkan user
@@ -101,10 +101,10 @@ class _BuatAkunState extends State<BuatAkun> {
         final String errorMsg =
             result['message'] ?? 'Terjadi kesalahan saat registrasi';
         _showSnackBar(errorMsg, Colors.red);
-        print('❌ Registrasi Gagal: $errorMsg');
+        debugPrint('❌ Registrasi Gagal: $errorMsg');
       }
     } catch (e) {
-      print('❌ Error registrasi exception: $e');
+      debugPrint('❌ Error registrasi exception: $e');
 
       // Handling error khusus
       String errorMessage;

@@ -147,7 +147,7 @@ class _LoginUserState extends State<LoginUser> {
 
     try {
       // Menampilkan status untuk debugging
-      print('🔑 Mencoba login: $email');
+      debugPrint('🔑 Mencoba login: $email');
 
       // Tambahkan delay untuk memastikan koneksi stabil
       await Future.delayed(const Duration(milliseconds: 500));
@@ -163,7 +163,7 @@ class _LoginUserState extends State<LoginUser> {
       if (result['success']) {
         // Login berhasil
         final userData = result['user'];
-        print('✅ Login berhasil: \\${userData['username']}');
+        debugPrint('✅ Login berhasil: \\${userData['username']}');
 
         // Simpan email dan username ke SharedPreferences
         final prefs = await SharedPreferences.getInstance();
@@ -186,7 +186,7 @@ class _LoginUserState extends State<LoginUser> {
         // Login gagal
         String errorMessage = result['message'] ?? 'Login gagal';
         String errorType = result['error_type'] ?? '';
-        print('❌ Login gagal: $errorMessage');
+        debugPrint('❌ Login gagal: $errorMessage');
 
         // Berikan pesan yang lebih informatif berdasarkan tipe error
         if (errorType == 'user_not_found') {
@@ -223,7 +223,7 @@ class _LoginUserState extends State<LoginUser> {
       }
     } catch (e) {
       _setLoading(false);
-      print('❌ Error login: $e');
+      debugPrint('❌ Error login: $e');
       _showSnackBar('Terjadi kesalahan sistem. Coba lagi nanti.', Colors.red);
     }
   }

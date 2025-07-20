@@ -14,9 +14,9 @@ class HotelDatabase {
   static Future<void> loadHotels() async {
     try {
       _hotels = await HotelService.getAllHotels();
-      print('✅ Berhasil load ${_hotels.length} hotel dari database');
+      debugPrint('✅ Berhasil load ${_hotels.length} hotel dari database');
     } catch (e) {
-      print('❌ Error loading hotels: $e');
+      debugPrint('❌ Error loading hotels: $e');
       // Fallback ke data dummy jika error
       // _hotels = _getDummyHotels();
     }
@@ -28,14 +28,14 @@ class HotelDatabase {
       final result = await HotelService.addHotel(hotel);
       if (result['success'] == true) {
         await loadHotels(); // Refresh local data
-        print('✅ Hotel berhasil ditambah ke database');
+        debugPrint('✅ Hotel berhasil ditambah ke database');
         return true;
       } else {
-        print('❌ Gagal menambah hotel: ${result['message']}');
+        debugPrint('❌ Gagal menambah hotel: ${result['message']}');
         return false;
       }
     } catch (e) {
-      print('❌ Error adding hotel: $e');
+      debugPrint('❌ Error adding hotel: $e');
       return false;
     }
   }
@@ -47,16 +47,16 @@ class HotelDatabase {
         final result = await HotelService.deleteHotel(_hotels[index].id!);
         if (result['success'] == true) {
           await loadHotels(); // Refresh local data
-          print('✅ Hotel berhasil dihapus dari database');
+          debugPrint('✅ Hotel berhasil dihapus dari database');
           return true;
         } else {
-          print('❌ Gagal menghapus hotel: ${result['message']}');
+          debugPrint('❌ Gagal menghapus hotel: ${result['message']}');
           return false;
         }
       }
       return false;
     } catch (e) {
-      print('❌ Error deleting hotel: $e');
+      debugPrint('❌ Error deleting hotel: $e');
       return false;
     }
   }
@@ -71,16 +71,16 @@ class HotelDatabase {
         );
         if (result['success'] == true) {
           await loadHotels(); // Refresh local data
-          print('✅ Hotel berhasil diupdate di database');
+          debugPrint('✅ Hotel berhasil diupdate di database');
           return true;
         } else {
-          print('❌ Gagal mengupdate hotel: ${result['message']}');
+          debugPrint('❌ Gagal mengupdate hotel: ${result['message']}');
           return false;
         }
       }
       return false;
     } catch (e) {
-      print('❌ Error updating hotel: $e');
+      debugPrint('❌ Error updating hotel: $e');
       return false;
     }
   }
@@ -90,7 +90,7 @@ class HotelDatabase {
     try {
       return await HotelService.searchHotels(query);
     } catch (e) {
-      print('❌ Error searching hotels: $e');
+      debugPrint('❌ Error searching hotels: $e');
       return [];
     }
   }
@@ -118,22 +118,6 @@ class _BerandaPageState extends State<BerandaPage> {
   }
 
   // Method untuk mendapatkan icon fasilitas
-  IconData _getFacilityIcon(String facility) {
-    switch (facility.toLowerCase()) {
-      case 'free wi-fi':
-        return Icons.wifi;
-      case 'swimming pool':
-        return Icons.pool;
-      case 'parking':
-        return Icons.local_parking;
-      case 'restaurant':
-        return Icons.restaurant;
-      case 'gym':
-        return Icons.fitness_center;
-      default:
-        return Icons.check_circle;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -378,27 +362,6 @@ class _BerandaPageState extends State<BerandaPage> {
                                   ],
                                 ),
                               ),
-
-                              // Action Button
-                              // tombol lihat
-                              // Container(
-                              //   padding: const EdgeInsets.symmetric(
-                              //     horizontal: 12,
-                              //     vertical: 8,
-                              //   ),
-                              //   decoration: BoxDecoration(
-                              //     color: const Color(0xFF29B6F6),
-                              //     borderRadius: BorderRadius.circular(20),
-                              //   ),
-                              //   child: const Text(
-                              //     'Lihat',
-                              //     style: TextStyle(
-                              //       color: Colors.white,
-                              //       fontSize: 12,
-                              //       fontWeight: FontWeight.w600,
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),

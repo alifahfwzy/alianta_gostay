@@ -34,10 +34,11 @@ class TampilanDetailHotel extends StatelessWidget {
                   hotel.imageUrl ?? '',
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey[300],
-                    child: const Center(child: Text('#gambarhotel')),
-                  ),
+                  errorBuilder:
+                      (context, error, stackTrace) => Container(
+                        color: Colors.grey[300],
+                        child: const Center(child: Text('#gambarhotel')),
+                      ),
                 ),
               ),
             ),
@@ -63,49 +64,53 @@ class TampilanDetailHotel extends StatelessWidget {
             const SizedBox(height: 8),
 
             Text(
-              hotel.description ?? 'Deskripsi belum tersedia.',
+              hotel.description,
               style: const TextStyle(fontSize: 14, color: Colors.black54),
             ),
             const SizedBox(height: 16),
 
-            const Text('Fasilitas', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text(
+              'Fasilitas',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
 
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: hotel.facilities.map((fasilitas) {
-                IconData icon;
-                switch (fasilitas.toLowerCase()) {
-                  case 'wifi':
-                  case 'free wifi':
-                  case 'free wi-fi':
-                    icon = Icons.wifi;
-                    break;
-                  case 'ac':
-                    icon = Icons.ac_unit;
-                    break;
-                  case 'restaurant':
-                    icon = Icons.restaurant;
-                    break;
-                  case 'spa':
-                    icon = Icons.spa;
-                    break;
-                  case 'pool':
-                  case 'swimming pool':
-                    icon = Icons.pool;
-                    break;
-                  case 'gym':
-                    icon = Icons.fitness_center;
-                    break;
-                  case 'parking':
-                    icon = Icons.local_parking;
-                    break;
-                  default:
-                    icon = Icons.check_circle_outline;
-                }
-                return _facilityItem(icon, fasilitas);
-              }).toList(),
+              children:
+                  hotel.facilities.map((fasilitas) {
+                    IconData icon;
+                    switch (fasilitas.toLowerCase()) {
+                      case 'wifi':
+                      case 'free wifi':
+                      case 'free wi-fi':
+                        icon = Icons.wifi;
+                        break;
+                      case 'ac':
+                        icon = Icons.ac_unit;
+                        break;
+                      case 'restaurant':
+                        icon = Icons.restaurant;
+                        break;
+                      case 'spa':
+                        icon = Icons.spa;
+                        break;
+                      case 'pool':
+                      case 'swimming pool':
+                        icon = Icons.pool;
+                        break;
+                      case 'gym':
+                        icon = Icons.fitness_center;
+                        break;
+                      case 'parking':
+                        icon = Icons.local_parking;
+                        break;
+                      default:
+                        icon = Icons.check_circle_outline;
+                    }
+                    return _facilityItem(icon, fasilitas);
+                  }).toList(),
             ),
             const SizedBox(height: 16),
 
@@ -119,7 +124,7 @@ class TampilanDetailHotel extends StatelessWidget {
                     hotel.location,
                     style: const TextStyle(fontSize: 14, color: Colors.black54),
                   ),
-                )
+                ),
               ],
             ),
           ],
