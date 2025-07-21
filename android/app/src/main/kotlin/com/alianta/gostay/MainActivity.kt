@@ -1,4 +1,4 @@
-package com.example.alianta_gostay
+package com.alianta.gostay
 
 import io.flutter.embedding.android.FlutterActivity
 
